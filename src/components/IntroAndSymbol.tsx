@@ -60,16 +60,12 @@ export function CoupleMonogramSection() {
           <div className="absolute inset-0 -m-8 sm:-m-16 rounded-full border border-gold-accent/10 animate-spin-slow" style={{ animationDirection: 'reverse', animationDuration: '25s' }} />
           <div className="absolute inset-0 -m-12 sm:-m-24 rounded-full border border-gold-accent/5 animate-spin-slow" style={{ animationDuration: '35s' }} />
 
-          {/* Central monogram circle */}
+          {/* Central Om emblem */}
           <div
             className="w-28 h-28 sm:w-36 sm:h-36 rounded-full border-2 border-gold-accent/40 flex items-center justify-center"
             style={{ background: 'radial-gradient(circle, rgba(212,160,23,0.12) 0%, rgba(139,0,0,0.2) 100%)' }}
           >
-            <div className="text-center">
-              <span className="font-vibes text-gold-accent text-2xl sm:text-4xl leading-none">V</span>
-              <span className="font-playfair text-gold-accent/50 text-base sm:text-lg mx-1">&</span>
-              <span className="font-vibes text-gold-accent text-2xl sm:text-4xl leading-none">K</span>
-            </div>
+            <span className="font-vibes text-gold-accent text-5xl sm:text-7xl leading-none">ॐ</span>
           </div>
         </div>
 
@@ -88,7 +84,7 @@ export function CoupleMonogramSection() {
         </p>
 
         <p className="font-cinzel text-gold-accent/50 text-[10px] sm:text-xs mt-3 sm:mt-4 tracking-[0.3em] uppercase">
-          Est. February 14, 2027
+          Marriages are settled in heaven.
         </p>
       </motion.div>
     </section>

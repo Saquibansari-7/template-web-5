@@ -143,13 +143,6 @@ export function TravelAccommodationSection() {
     },
   ];
 
-  const localTips = [
-    { icon: 'weather', tip: 'Jaipur weather in February is pleasant — light layers for evenings recommended.' },
-    { icon: 'rupee', tip: 'Carry some cash for local markets and auto-rickshaws.' },
-    { icon: 'monument', tip: 'Visit Hawa Mahal, Amber Fort & Nahargarh during your stay.' },
-    { icon: 'chai', tip: 'Try the famous Rajasthani dal-baati-churma and masala chai at local eateries.' },
-  ];
-
   return (
     <section className="relative py-24 md:py-32 bg-cream overflow-hidden">
       <div className="container mx-auto px-6">
@@ -237,42 +230,6 @@ export function TravelAccommodationSection() {
                 <div className="w-8 h-[1px] bg-gold/40 mx-auto my-3" />
                 <p className="font-lato text-wine/80 text-sm leading-relaxed mb-2">{hotel.names}</p>
                 <p className="font-lato text-wine/50 text-xs italic">{hotel.note}</p>
-              </div>
-            </motion.div>
-          ))}
-        </div>
-
-        {/* Local Tips */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.8 }}
-          className="text-center mb-10"
-        >
-          <h3 className="font-cinzel text-wine text-2xl mb-2">Local Tips</h3>
-          <GoldDivider width="80px" className="mb-10" withDiamond={false} />
-        </motion.div>
-
-        <div className="max-w-3xl mx-auto grid grid-cols-1 sm:grid-cols-2 gap-5">
-          {localTips.map((tip, i) => (
-            <motion.div
-              key={i}
-              initial={{ opacity: 0, x: i % 2 === 0 ? -20 : 20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: i * 0.1 }}
-            >
-              <div
-                className="flex items-start gap-4 p-5"
-                style={{
-                  background: 'rgba(139,0,0,0.04)',
-                  border: '1px solid rgba(139,0,0,0.08)',
-                  borderRadius: '8px',
-                }}
-              >
-                <span className="flex-shrink-0 mt-0.5"><PremiumIcon name={tip.icon} size={28} /></span>
-                <p className="font-lato text-wine/70 text-sm leading-relaxed">{tip.tip}</p>
               </div>
             </motion.div>
           ))}
