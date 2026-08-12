@@ -230,97 +230,97 @@ export function SendLoveSection() {
   );
 }
 
-export function FAQsSection() {
-  const faqs = [
+export function BlessingVerseSection() {
+  const verses = [
     {
-      icon: 'dress',
-      question: 'What is the dress code?',
-      answer:
-        'Traditional Indian attire is encouraged. Ladies may wear sarees, lehengas, or salwar suits. Gentlemen may wear sherwanis, kurta-pajamas, or formal suits. Please embrace vibrant colors — it\'s a celebration!',
+      sanskrit:
+        'संगच्छध्वं संवदध्वं सं वो मनांसि जानताम् ।\nदेवा भागं यथा पूर्वे संजानाना उपासते ॥',
+      transliteration: 'Sangachhadhwam Samvadadhwam Sam Vo Manamsi Jaanataam | Devaa Bhaagam Yathaa Purve Sanjaanaanaa Upaasate ||',
+      translation:
+        'Walk together in harmony, speak with one mind, and let your hearts be united — even as the gods of old gathered in perfect accord.',
+      source: 'Rigveda 10.191.2 — Prayer for Unity',
     },
     {
-      icon: 'child',
-      question: 'Are children invited?',
-      answer:
-        'Absolutely! Children of all ages are welcome. We will have a supervised kids\' corner with activities during the reception. Highchairs and child-friendly meals are available — please mention in your RSVP.',
-    },
-    {
-      icon: 'camera',
-      question: 'Can we take photographs?',
-      answer:
-        'We\'d love you to capture memories! Personal photography is welcome during the Mehndi, Sangeet, and reception. During the sacred wedding ceremony (pheras), we kindly request no flash photography — our professional team will cover it.',
-    },
-    {
-      icon: 'thali',
-      question: 'What about food preferences?',
-      answer:
-        'A grand vegetarian feast will be served, including Jain-friendly and vegan options. If you have specific dietary needs (allergies, halal requirements), please let us know in your RSVP so we can accommodate you.',
-    },
-    {
-      icon: 'parking',
-      question: 'What about parking & shuttles?',
-      answer:
-        'Complimentary valet parking is available at the venue. Shuttle buses will run from select partner hotels to the venue and back. Pickup schedules will be shared closer to the date via WhatsApp.',
-    },
-    {
-      icon: 'om',
-      question: 'What is the ceremony timing?',
-      answer:
-        'The wedding ceremony will commence at the auspicious muhurat of 4:30 PM on February 14, 2027. The pheras are expected at 5:15 PM. We request guests to be seated by 4:00 PM for the rituals to begin on time.',
+      sanskrit:
+        'उभौ सुमनसौ कृणुष्व मा विवादिष्टं वचसा ।\nअन्यो अन्यमभि हर्यतं प्रिया मनसि सन्तता ॥',
+      transliteration: 'Ubhau Sumanasau Krinushwa Ma Vivadishtam Vachasaa | Anyo Anyamabhi Haryatam Priyaa Manasi Santataa ||',
+      translation:
+        'May the two of you be of one mind and gentle of speech; may each delight in the other, your hearts ever bound in love.',
+      source: 'Atharvaveda — Vivaha Sukta',
     },
   ];
 
   return (
-    <section className="relative py-24 md:py-32 bg-cream overflow-hidden">
-      <div className="relative z-10 container mx-auto px-6">
+    <section className="relative py-24 md:py-32 overflow-hidden" style={{ background: 'linear-gradient(135deg, #8B0000 0%, #6B0000 50%, #8B0000 100%)' }}>
+      {/* Subtle pattern */}
+      <div className="absolute inset-0 opacity-5"
+        style={{
+          backgroundImage: `url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23F2C94C' fill-opacity='1' fill-rule='evenodd'%3E%3Cpath d='M0 40L40 0H20L0 20M40 40V20L20 40'/%3E%3C/g%3E%3C/svg%3E")`,
+        }}
+      />
+
+      {/* Floating petals */}
+      <div className="absolute top-12 left-12 text-3xl animate-float opacity-25">🪷</div>
+      <div className="absolute top-24 right-20 text-2xl animate-float-slow opacity-20" style={{ animationDelay: '1.5s' }}>🌸</div>
+      <div className="absolute bottom-16 left-1/4 text-2xl animate-float opacity-20" style={{ animationDelay: '2s' }}>💫</div>
+      <div className="absolute bottom-12 right-16 text-xl animate-float-slow opacity-25" style={{ animationDelay: '0.5s' }}>✿</div>
+
+      <div className="relative z-10 container mx-auto px-6 text-center">
+        {/* Heading */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8 }}
-          className="text-center"
         >
-          <h2 className="font-cinzel text-wine text-3xl md:text-4xl mb-4">Frequently Asked Questions</h2>
+          <div className="flex justify-center mb-5">
+            <PremiumIcon name="om" size={48} />
+          </div>
+          <h2 className="font-cinzel text-cream text-3xl md:text-4xl mb-4">
+            A Sacred <span className="font-vibes text-gold-accent text-4xl md:text-5xl">Blessing</span>
+          </h2>
           <GoldDivider className="mb-4" />
-          <p className="font-playfair text-wine/60 text-lg italic mb-16">
-            Everything you might want to know
+          <p className="font-playfair text-cream/60 text-lg italic mb-14">
+            Words of the ancients, woven into our union
           </p>
         </motion.div>
 
-        <div className="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6">
-          {faqs.map((faq, i) => (
+        {/* Verse cards */}
+        <div className="max-w-3xl mx-auto space-y-8">
+          {verses.map((verse, i) => (
             <motion.div
               key={i}
-              initial={{ opacity: 0, y: 20 }}
+              initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: i * 0.1 }}
-              className="card-hover"
+              transition={{ duration: 0.7, delay: i * 0.15 }}
+              className="relative text-center"
+              style={{
+                background: 'linear-gradient(135deg, rgba(212,160,23,0.12) 0%, rgba(242,201,76,0.04) 100%)',
+                border: '2px solid rgba(242,201,76,0.3)',
+                borderRadius: '12px',
+              }}
             >
-              <div
-                className="relative p-6 h-full"
-                style={{
-                  background: 'linear-gradient(135deg, rgba(245,230,200,0.95) 0%, rgba(245,214,110,0.2) 100%)',
-                  border: '2px solid rgba(212,160,23,0.3)',
-                  borderRadius: '8px',
-                }}
-              >
-                {/* Corner accents */}
-                <div className="absolute top-2 left-2 w-4 h-4 border-t border-l border-gold-accent/40" />
-                <div className="absolute top-2 right-2 w-4 h-4 border-t border-r border-gold-accent/40" />
-                <div className="absolute bottom-2 left-2 w-4 h-4 border-b border-l border-gold-accent/40" />
-                <div className="absolute bottom-2 right-2 w-4 h-4 border-b border-r border-gold-accent/40" />
+              {/* Corner accents */}
+              <div className="absolute top-3 left-3 w-5 h-5 border-t-2 border-l-2 border-gold-accent/50" />
+              <div className="absolute top-3 right-3 w-5 h-5 border-t-2 border-r-2 border-gold-accent/50" />
+              <div className="absolute bottom-3 left-3 w-5 h-5 border-b-2 border-l-2 border-gold-accent/50" />
+              <div className="absolute bottom-3 right-3 w-5 h-5 border-b-2 border-r-2 border-gold-accent/50" />
 
-                <div className="flex items-start gap-4">
-                  <span className="flex-shrink-0 mt-1"><PremiumIcon name={faq.icon} size={32} /></span>
-                  <div>
-                    <h3 className="font-cinzel text-wine text-base mb-3 tracking-wider leading-snug">
-                      {faq.question}
-                    </h3>
-                    <div className="w-8 h-[1px] bg-gold/40 mb-3" />
-                    <p className="font-lato text-wine/65 text-sm leading-relaxed">{faq.answer}</p>
-                  </div>
-                </div>
+              <div className="p-8 md:p-12">
+                <p className="font-vibes text-gold-accent text-3xl md:text-4xl leading-relaxed mb-6 whitespace-pre-line">
+                  {verse.sanskrit}
+                </p>
+                <p className="font-cinzel text-cream/55 text-xs tracking-[0.2em] uppercase mb-5">
+                  {verse.transliteration}
+                </p>
+                <div className="w-12 h-[1px] bg-gold-accent/40 mx-auto mb-5" />
+                <p className="font-playfair text-cream/80 text-lg italic leading-relaxed mb-4">
+                  “{verse.translation}”
+                </p>
+                <p className="font-lato text-gold-accent/70 text-xs tracking-[0.15em] uppercase">
+                  {verse.source}
+                </p>
               </div>
             </motion.div>
           ))}

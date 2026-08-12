@@ -5,7 +5,7 @@ import { InteractiveMapSection, TravelAccommodationSection, FamilyWeddingPartySe
 import { CulturalSection, SaveTheDateSection } from './components/CulturalAndSaveDate';
 import { InvitationSection, EventDetailsSection } from './components/InvitationAndEvents';
 import { StorySection, MemoriesSection } from './components/StoryAndMemories';
-import { SendLoveSection, FAQsSection, Footer } from './components/RSVPAndFooter';
+import { SendLoveSection, BlessingVerseSection, Footer } from './components/RSVPAndFooter';
 
 function App() {
   return (
@@ -52,8 +52,8 @@ function App() {
       {/* 13. Send Love (RSVP blessings board) */}
       <SendLoveSection />
 
-      {/* 14. FAQs */}
-      <FAQsSection />
+      {/* 14. Sacred Blessing Verse */}
+      <BlessingVerseSection />
 
       {/* 15. Footer */}
       <Footer />
