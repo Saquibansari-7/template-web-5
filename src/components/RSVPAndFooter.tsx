@@ -2,6 +2,7 @@ import { useState, useCallback } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import GoldDivider from './GoldDivider';
 import PremiumIcon from './PremiumIcon';
+import { useContent } from '../admin/store';
 
 /* ─── Sparkle particle type ─── */
 interface Sparkle {
@@ -18,6 +19,7 @@ let sparkleIdCounter = 0;
 const SPARKLE_EMOJIS = ['✨', '💫', '🌸', '💖', '🪷', '⭐'];
 
 export function SendLoveSection() {
+  const { content } = useContent();
   const [message, setMessage] = useState('');
   const [name, setName] = useState('');
   const [blessings, setBlessings] = useState<{ id: number; name: string; message: string }[]>([]);
@@ -83,13 +85,10 @@ export function SendLoveSection() {
           transition={{ duration: 0.8 }}
           className="text-center"
         >
-          <h2 className="font-cinzel text-wine text-3xl md:text-4xl mb-4">
-            Send Your{' '}
-            <span className="font-vibes text-wine text-4xl md:text-5xl">Love</span>
-          </h2>
+          <h2 className="font-cinzel text-wine text-3xl md:text-4xl mb-4">{content.sendLoveHeading}</h2>
           <GoldDivider className="mb-4" />
           <p className="font-playfair text-wine/70 text-lg italic mb-12">
-            Shower the couple with your blessings & warm wishes
+            {content.sendLoveSub}
           </p>
         </motion.div>
 
@@ -122,7 +121,7 @@ export function SendLoveSection() {
             <div className="space-y-5">
               {/* Name */}
               <div>
-                <label className="block font-cinzel text-wine text-sm mb-2 tracking-wider">Your Name</label>
+                <label className="block font-cinzel text-wine text-sm mb-2 tracking-wider">{content.sendLoveNameLabel}</label>
                 <input
                   type="text"
                   value={name}
@@ -134,14 +133,14 @@ export function SendLoveSection() {
 
               {/* Message */}
               <div>
-                <label className="block font-cinzel text-wine text-sm mb-2 tracking-wider">Your Blessing</label>
+                <label className="block font-cinzel text-wine text-sm mb-2 tracking-wider">{content.sendLoveMessageLabel}</label>
                 <textarea
                   value={message}
                   onChange={(e) => setMessage(e.target.value)}
                   rows={4}
                   maxLength={280}
                   className="w-full px-4 py-3 bg-cream-light/80 border border-wine/15 rounded-lg font-lato text-wine focus:outline-none focus:border-wine/40 focus:ring-1 focus:ring-wine/20 resize-none transition-all duration-200"
-                  placeholder="Write your heartfelt wishes for the couple…"
+                  placeholder={content.sendLovePlaceholder}
                 />
                 <p className="text-right font-lato text-wine/40 text-xs mt-1">{message.length}/280</p>
               </div>
@@ -178,7 +177,7 @@ export function SendLoveSection() {
               className="mt-16 max-w-4xl mx-auto"
             >
               <div className="text-center mb-10">
-                <h3 className="font-cinzel text-wine text-2xl mb-2">Blessings & Wishes</h3>
+                <h3 className="font-cinzel text-wine text-2xl mb-2">{content.blessingsHeading}</h3>
                 <GoldDivider width="80px" withDiamond={false} />
               </div>
 
@@ -331,14 +330,16 @@ export function BlessingVerseSection() {
 }
 
 export function Footer() {
+  const { content } = useContent();
+  const { groomName, brideName, weddingDate, venueCity } = content;
   return (
     <footer className="relative py-16 bg-wine-dark">
       <div className="container mx-auto px-6 text-center">
         <GoldDivider className="mb-8" withDiamond={false} />
 
-        <h3 className="font-vibes text-gold-accent text-4xl mb-4">Vikram & Kavya</h3>
+        <h3 className="font-vibes text-gold-accent text-4xl mb-4">{groomName} & {brideName}</h3>
         <p className="font-cinzel text-cream/50 text-sm tracking-[0.2em] uppercase mb-8">
-          February 14, 2027 • Jaipur, India
+          {weddingDate} • {venueCity}
         </p>
 
         {/* Social icons */}

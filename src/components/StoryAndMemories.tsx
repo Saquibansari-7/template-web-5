@@ -1,7 +1,10 @@
 import { motion } from 'framer-motion';
 import GoldDivider from './GoldDivider';
+import { useContent } from '../admin/store';
 
 export function StorySection() {
+  const { content } = useContent();
+  const paragraphs = content.storyParagraphs;
   return (
     <section className="relative py-24 md:py-32 bg-gradient-to-b from-wine to-wine-dark overflow-hidden">
       {/* Floating petals */}
@@ -16,7 +19,7 @@ export function StorySection() {
           transition={{ duration: 0.8 }}
           className="text-center"
         >
-          <h2 className="font-cinzel text-cream text-3xl md:text-4xl mb-4">Our Story</h2>
+          <h2 className="font-cinzel text-cream text-3xl md:text-4xl mb-4">{content.storyHeading}</h2>
           <GoldDivider className="mb-12" />
         </motion.div>
 
@@ -27,15 +30,11 @@ export function StorySection() {
           transition={{ duration: 0.8, delay: 0.2 }}
           className="max-w-2xl mx-auto text-center"
         >
-          <p className="font-playfair text-cream/80 text-lg md:text-xl leading-relaxed italic mb-8">
-            It all began with a chance encounter at a friend's gathering in Mumbai. Vikram's warm smile and Kavya's infectious laughter sparked a connection that neither could ignore.
-          </p>
-          <p className="font-playfair text-cream/80 text-lg md:text-xl leading-relaxed italic mb-8">
-            Through shared dreams, countless conversations, and adventures across India, their bond grew deeper with every passing day. From the ghats of Varanasi to the backwaters of Kerala, their love story unfolded like a beautiful melody.
-          </p>
-          <p className="font-playfair text-cream/80 text-lg md:text-xl leading-relaxed italic">
-            Now, surrounded by the blessings of their families and the warmth of their loved ones, Vikram and Kavya embark on the most beautiful journey of all — a lifetime together.
-          </p>
+          {paragraphs.map((p, i) => (
+            <p key={i} className="font-playfair text-cream/80 text-lg md:text-xl leading-relaxed italic mb-8">
+              {p}
+            </p>
+          ))}
         </motion.div>
 
         {/* Timeline dots */}
@@ -57,16 +56,9 @@ export function StorySection() {
   );
 }
 
-const galleryImages = [
-  { src: '/images/gallery-1.jpg', alt: 'Mehndi' },
-  { src: '/images/gallery-2.jpg', alt: 'Mandap' },
-  { src: '/images/gallery-3.jpg', alt: 'Celebration' },
-  { src: '/images/gallery-4.jpg', alt: 'Ceremony' },
-  { src: '/images/gallery-5.jpg', alt: 'Jewelry' },
-  { src: '/images/gallery-6.jpg', alt: 'Decorations' },
-];
-
 export function MemoriesSection() {
+  const { content } = useContent();
+  const gallery = content.gallery;
   return (
     <section className="relative py-24 md:py-32 bg-wine-dark overflow-hidden">
       <div className="relative z-10 container mx-auto px-6">
@@ -77,12 +69,12 @@ export function MemoriesSection() {
           transition={{ duration: 0.8 }}
           className="text-center"
         >
-          <h2 className="font-cinzel text-cream text-3xl md:text-4xl mb-4">Memories</h2>
+          <h2 className="font-cinzel text-cream text-3xl md:text-4xl mb-4">{content.galleryHeading}</h2>
           <GoldDivider className="mb-12" />
         </motion.div>
 
         <div className="max-w-5xl mx-auto grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-4">
-          {galleryImages.map((img, i) => (
+          {gallery.map((img, i) => (
             <motion.div
               key={i}
               initial={{ opacity: 0, scale: 0.9 }}

@@ -1,11 +1,13 @@
 import { motion } from 'framer-motion';
 import GoldDivider from './GoldDivider';
 import PremiumIcon from './PremiumIcon';
+import { useContent } from '../admin/store';
 
 /* ─── Interactive Map (replaces TypographySection) ─── */
 export function InteractiveMapSection() {
-  const venueAddress = 'The Grand Palace, Jaipur, Rajasthan, India';
-  const googleMapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(venueAddress)}`;
+  const { content } = useContent();
+  const { mapHeading, mapSub, mapAddress, mapEmbedUrl } = content;
+  const googleMapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(mapAddress)}`;
 
   return (
     <section className="relative py-16 sm:py-24 md:py-32 bg-cream overflow-hidden">
@@ -17,10 +19,10 @@ export function InteractiveMapSection() {
           transition={{ duration: 0.8 }}
           className="text-center"
         >
-          <h2 className="font-cinzel text-wine text-2xl sm:text-3xl md:text-4xl mb-3 sm:mb-4">Wedding Venue</h2>
+          <h2 className="font-cinzel text-wine text-2xl sm:text-3xl md:text-4xl mb-3 sm:mb-4">{mapHeading}</h2>
           <GoldDivider className="mb-4" />
           <p className="font-playfair text-wine/60 text-base sm:text-lg italic mb-8 sm:mb-12">
-            Where two hearts become one
+            {mapSub}
           </p>
         </motion.div>
 
@@ -49,7 +51,7 @@ export function InteractiveMapSection() {
             <div className="mb-4 sm:mb-6 rounded-lg overflow-hidden border border-wine/10" style={{ aspectRatio: '16/9', minHeight: '200px' }}>
               <iframe
                 title="Wedding Venue Location"
-                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3557.5!2d75.7873!3d26.9124!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMjbCsDU0JzQ0LjYiTiA3NcKwNDcnMTQuMyJF!5e0!3m2!1sen!2sin!4v1"
+                src={mapEmbedUrl}
                 width="100%"
                 height="100%"
                 style={{ border: 0 }}
@@ -61,17 +63,14 @@ export function InteractiveMapSection() {
 
             <div className="flex justify-center mb-3 sm:mb-4"><PremiumIcon name="venue" size={40} /></div>
 
-            <h3 className="font-cinzel text-wine text-lg sm:text-2xl md:text-3xl mb-2 sm:mb-3">The Grand Palace</h3>
+            <h3 className="font-cinzel text-wine text-lg sm:text-2xl md:text-3xl mb-2 sm:mb-3">{mapAddress.split(',')[0]}</h3>
 
             <div className="my-3 sm:my-4">
               <GoldDivider width="60px" withDiamond={false} />
             </div>
 
-            <p className="font-lato text-wine/70 text-sm sm:text-base leading-relaxed mb-1 sm:mb-2">
-              Near Amer Fort Road, Jaipur
-            </p>
-            <p className="font-lato text-wine/50 text-xs sm:text-sm mb-6 sm:mb-8">
-              Rajasthan 302001, India
+            <p className="font-lato text-wine/70 text-sm sm:text-base leading-relaxed mb-6 sm:mb-8">
+              {mapAddress}
             </p>
 
             <a
@@ -95,53 +94,8 @@ export function InteractiveMapSection() {
 
 /* ─── Travel & Accommodation (replaces ColorPaletteSection) ─── */
 export function TravelAccommodationSection() {
-  const travelInfo = [
-    {
-      icon: 'airplane',
-      title: 'Nearest Airport',
-      details: 'Jaipur International Airport (JAI)',
-      sub: '~25 km from the venue • 40 min drive',
-    },
-    {
-      icon: 'train',
-      title: 'Railway Station',
-      details: 'Jaipur Junction (JP)',
-      sub: '~12 km from the venue • 25 min drive',
-    },
-    {
-      icon: 'cab',
-      title: 'Cab Services',
-      details: 'Ola & Uber available citywide',
-      sub: 'Pre-book for airport/station pickups',
-    },
-    {
-      icon: 'shuttle',
-      title: 'Shuttle Service',
-      details: 'Complimentary guest shuttles provided',
-      sub: 'Routes from major hotels to venue',
-    },
-  ];
-
-  const hotels = [
-    {
-      tier: 'Luxury',
-      icon: 'luxury',
-      names: 'Rambagh Palace, Taj Jai Mahal Palace',
-      note: 'Heritage luxury experience',
-    },
-    {
-      tier: 'Mid-Range',
-      icon: 'hotel',
-      names: 'ITC Rajputana, Holiday Inn Jaipur',
-      note: 'Comfortable & convenient',
-    },
-    {
-      tier: 'Budget',
-      icon: 'budget',
-      names: 'Zostel Jaipur, Hotel Pearl Palace',
-      note: 'Affordable & well-rated',
-    },
-  ];
+  const { content } = useContent();
+  const { travelInfo, hotels, travelHeading, travelSub, hotelsHeading } = content;
 
   return (
     <section className="relative py-24 md:py-32 bg-cream overflow-hidden">
@@ -153,7 +107,7 @@ export function TravelAccommodationSection() {
           transition={{ duration: 0.8 }}
           className="text-center"
         >
-          <h2 className="font-cinzel text-wine text-3xl md:text-4xl mb-4">Travel & Accommodation</h2>
+          <h2 className="font-cinzel text-wine text-3xl md:text-4xl mb-4">{travelHeading}</h2>
           <GoldDivider className="mb-4" />
           <p className="font-playfair text-wine/60 text-lg italic mb-16">
             Everything you need for a comfortable journey
@@ -162,7 +116,7 @@ export function TravelAccommodationSection() {
 
         {/* Travel Info Cards */}
         <div className="max-w-5xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
-          {travelInfo.map((item, i) => (
+          {travelInfo.filter((t) => t.enabled).map((item, i) => (
             <motion.div
               key={item.title}
               initial={{ opacity: 0, y: 20 }}
@@ -197,12 +151,12 @@ export function TravelAccommodationSection() {
           transition={{ duration: 0.8 }}
           className="text-center mb-10"
         >
-          <h3 className="font-cinzel text-wine text-2xl mb-2">Hotel Recommendations</h3>
+          <h3 className="font-cinzel text-wine text-2xl mb-2">{hotelsHeading}</h3>
           <GoldDivider width="80px" className="mb-10" withDiamond={false} />
         </motion.div>
 
         <div className="max-w-4xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
-          {hotels.map((hotel, i) => (
+          {hotels.filter((h) => h.enabled).map((hotel, i) => (
             <motion.div
               key={hotel.tier}
               initial={{ opacity: 0, y: 20 }}

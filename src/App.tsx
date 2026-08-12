@@ -6,54 +6,62 @@ import { CulturalSection, SaveTheDateSection } from './components/CulturalAndSav
 import { InvitationSection, EventDetailsSection } from './components/InvitationAndEvents';
 import { StorySection, MemoriesSection } from './components/StoryAndMemories';
 import { SendLoveSection, BlessingVerseSection, Footer } from './components/RSVPAndFooter';
+import { useContent } from './admin/store';
 
 function App() {
+  const { content } = useContent();
+  const s = content.sections;
+
   return (
     <div className="min-h-screen bg-wine">
       {/* Floating petals overlay */}
       <FloatingPetals count={12} />
 
-      {/* 1. Hero Section */}
-      <HeroSection />
+      {s.hero && (
+        <>
+          {/* 1. Hero Section */}
+          <HeroSection />
 
-      {/* 2. Intro Text Block */}
-      <IntroSection />
+          {/* 2. Intro Text Block */}
+          {s.intro && <IntroSection />}
 
-      {/* 3. Couple Monogram Section */}
-      <CoupleMonogramSection />
+          {/* 3. Couple Monogram Section */}
+          {s.monogram && <CoupleMonogramSection />}
+        </>
+      )}
 
       {/* 4. Save The Date & Live Countdown */}
-      <SaveTheDateSection />
+      {s.saveDate && <SaveTheDateSection />}
 
       {/* 5. Our Story */}
-      <StorySection />
+      {s.story && <StorySection />}
 
       {/* 6. Memories Gallery */}
-      <MemoriesSection />
+      {s.memories && <MemoriesSection />}
 
       {/* 7. Wedding Invitation */}
-      <InvitationSection />
+      {s.invitation && <InvitationSection />}
 
       {/* 8. Event Details / Schedule */}
-      <EventDetailsSection />
+      {s.events && <EventDetailsSection />}
 
       {/* 9. Cultural Highlight */}
-      <CulturalSection />
+      {s.cultural && <CulturalSection />}
 
       {/* 10. Family & Wedding Party */}
-      <FamilyWeddingPartySection />
+      {s.family && <FamilyWeddingPartySection />}
 
       {/* 11. Travel & Accommodation */}
-      <TravelAccommodationSection />
+      {s.travel && <TravelAccommodationSection />}
 
       {/* 12. Interactive Map */}
-      <InteractiveMapSection />
+      {s.map && <InteractiveMapSection />}
 
       {/* 13. Send Love (RSVP blessings board) */}
-      <SendLoveSection />
+      {s.sendLove && <SendLoveSection />}
 
       {/* 14. Sacred Blessing Verse */}
-      <BlessingVerseSection />
+      {s.blessing && <BlessingVerseSection />}
 
       {/* 15. Footer */}
       <Footer />

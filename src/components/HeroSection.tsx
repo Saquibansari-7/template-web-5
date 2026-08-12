@@ -1,13 +1,17 @@
 import { motion } from 'framer-motion';
 import GoldDivider from './GoldDivider';
+import { useContent } from '../admin/store';
 
 export default function HeroSection() {
+  const { content } = useContent();
+  const { groomName, brideName, weddingDate, heroPreLine, heroRequestLine, images } = content;
+
   return (
     <section className="relative min-h-screen overflow-hidden">
       {/* Background */}
       <div className="absolute inset-0">
         <img
-          src="/images/hero-bg.jpg"
+          src={images.heroBg}
           alt="Wedding background"
           className="w-full h-full object-cover"
         />
@@ -58,7 +62,7 @@ export default function HeroSection() {
               transition={{ delay: 0.5, duration: 0.8 }}
               className="font-lato text-cream/80 text-xs sm:text-sm md:text-lg tracking-[0.3em] uppercase mb-2 sm:mb-4"
             >
-              Together with their families
+              {heroPreLine}
             </motion.p>
 
             <motion.h1
@@ -67,7 +71,7 @@ export default function HeroSection() {
               transition={{ delay: 0.7, duration: 0.8 }}
               className="font-cinzel text-3xl sm:text-4xl md:text-5xl lg:text-7xl xl:text-8xl text-cream mb-2 sm:mb-4 leading-tight"
             >
-              <span className="gold-shimmer">Vikram</span>
+              <span className="gold-shimmer">{groomName}</span>
             </motion.h1>
 
             <motion.div
@@ -85,7 +89,7 @@ export default function HeroSection() {
               transition={{ delay: 1.1, duration: 0.8 }}
               className="font-cinzel text-3xl sm:text-4xl md:text-5xl lg:text-7xl xl:text-8xl text-cream mb-4 sm:mb-8 leading-tight"
             >
-              <span className="gold-shimmer">Kavya</span>
+              <span className="gold-shimmer">{brideName}</span>
             </motion.h1>
 
             <GoldDivider width="80px" className="mb-6 sm:mb-8 justify-center lg:justify-start" />
@@ -96,7 +100,7 @@ export default function HeroSection() {
               transition={{ delay: 1.4, duration: 0.8 }}
               className="font-lato text-cream/70 text-sm sm:text-base md:text-lg tracking-wider"
             >
-              Request the pleasure of your company
+              {heroRequestLine}
             </motion.p>
             <motion.p
               initial={{ opacity: 0 }}
@@ -104,7 +108,7 @@ export default function HeroSection() {
               transition={{ delay: 1.6, duration: 0.8 }}
               className="font-cinzel text-gold-accent text-lg sm:text-xl md:text-2xl mt-1 sm:mt-2 tracking-wider"
             >
-              February 14, 2027
+              {weddingDate}
             </motion.p>
           </motion.div>
 
@@ -122,7 +126,7 @@ export default function HeroSection() {
 
               <div className="relative w-60 h-80 sm:w-72 sm:h-96 md:w-80 md:h-[440px] lg:w-96 lg:h-[520px] rounded-2xl overflow-hidden shadow-2xl">
                 <img
-                  src="/images/bride.jpg"
+                  src={images.bride}
                   alt="Bride"
                   className="w-full h-full object-cover"
                 />

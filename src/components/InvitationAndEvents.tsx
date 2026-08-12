@@ -1,7 +1,10 @@
 import { motion } from 'framer-motion';
 import GoldDivider from './GoldDivider';
+import { useContent } from '../admin/store';
 
 export function InvitationSection() {
+  const { content } = useContent();
+  const { groomName, brideName, weddingDate, venueName, venueCity, invitationPreLine, invitationBody, invitationTimeText } = content;
   return (
     <section className="relative py-24 md:py-32 bg-gradient-to-b from-wine-dark to-wine overflow-hidden">
       {/* Decorative floating elements */}
@@ -46,28 +49,28 @@ export function InvitationSection() {
 
 
             <p className="font-lato text-wine/60 text-sm tracking-[0.3em] uppercase mb-4">
-              Together with their families
+              {invitationPreLine}
             </p>
 
-            <h3 className="font-cinzel text-wine text-3xl md:text-4xl mb-2">Vikram & Kavya</h3>
+            <h3 className="font-cinzel text-wine text-3xl md:text-4xl mb-2">{groomName} & {brideName}</h3>
 
             <p className="font-lato text-wine/70 text-base mt-4 leading-relaxed max-w-md mx-auto">
-              Request the honour of your presence at the celebration of their marriage
+              {invitationBody}
             </p>
 
             <div className="my-6">
               <GoldDivider width="60px" withDiamond={false} />
             </div>
 
-            <p className="font-cinzel text-wine text-xl">Sunday, February 14, 2027</p>
-            <p className="font-lato text-wine/60 text-sm mt-2">at half past four in the afternoon</p>
+            <p className="font-cinzel text-wine text-xl">{weddingDate}</p>
+            <p className="font-lato text-wine/60 text-sm mt-2">{invitationTimeText}</p>
 
             <div className="my-6">
               <GoldDivider width="40px" withDiamond={false} />
             </div>
 
-            <p className="font-cinzel text-wine/80 text-lg">The Grand Palace</p>
-            <p className="font-lato text-wine/50 text-sm">Jaipur, Rajasthan, India</p>
+            <p className="font-cinzel text-wine/80 text-lg">{venueName}</p>
+            <p className="font-lato text-wine/50 text-sm">{venueCity}</p>
 
             {/* Bottom ornament */}
             <div className="mt-8 flex justify-center gap-2">
@@ -83,32 +86,8 @@ export function InvitationSection() {
 }
 
 export function EventDetailsSection() {
-  const events = [
-    {
-      day: 'Day 1',
-      date: 'February 12, 2027',
-      title: 'Mehndi & Sangeet',
-      time: '4:00 PM Onwards',
-      description: 'An evening of henna artistry, music, and dance celebrating the joy of togetherness.',
-
-    },
-    {
-      day: 'Day 2',
-      date: 'February 13, 2027',
-      title: 'Haldi & Baraat',
-      time: '10:00 AM Onwards',
-      description: 'Sacred turmeric ceremony followed by the groom\'s grand procession with music and celebration.',
-
-    },
-    {
-      day: 'Day 3',
-      date: 'February 14, 2027',
-      title: 'Wedding & Reception',
-      time: '4:30 PM Onwards',
-      description: 'The sacred wedding ceremony under the mandap, followed by a grand celebration of love.',
-
-    },
-  ];
+  const { content } = useContent();
+  const events = content.events;
 
   return (
     <section className="relative py-24 md:py-32 bg-wine overflow-hidden">
@@ -127,7 +106,7 @@ export function EventDetailsSection() {
           transition={{ duration: 0.8 }}
           className="text-center"
         >
-          <h2 className="font-cinzel text-cream text-3xl md:text-4xl mb-4">Wedding Events</h2>
+          <h2 className="font-cinzel text-cream text-3xl md:text-4xl mb-4">{content.eventsHeading}</h2>
           <GoldDivider className="mb-16" />
         </motion.div>
 

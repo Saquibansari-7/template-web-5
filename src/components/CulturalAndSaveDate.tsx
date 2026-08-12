@@ -1,8 +1,11 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import GoldDivider from './GoldDivider';
+import { useContent } from '../admin/store';
 
 export function CulturalSection() {
+  const { content } = useContent();
+  const { images } = content;
   return (
     <section className="relative py-16 sm:py-24 md:py-32 overflow-hidden" style={{ background: 'linear-gradient(135deg, #D4A017 0%, #F2C94C 50%, #D4A017 100%)' }}>
       {/* Floating petals */}
@@ -37,7 +40,7 @@ export function CulturalSection() {
 
             <div className="relative rounded-2xl overflow-hidden shadow-2xl">
               <img
-                src="/images/food-plate.jpg"
+                src={images.thali}
                 alt="Traditional Indian Thali"
                 className="w-full aspect-square object-cover"
               />
@@ -54,6 +57,8 @@ export function CulturalSection() {
 }
 
 export function SaveTheDateSection() {
+  const { content } = useContent();
+  const { groomName, brideName, weddingDate, venueName, venueCity, images } = content;
   const [timeLeft, setTimeLeft] = useState({
     days: 0,
     hours: 0,
@@ -62,8 +67,11 @@ export function SaveTheDateSection() {
   });
 
   useEffect(() => {
-    // Target date is February 14, 2027
-    const targetDate = new Date('2027-02-14T00:00:00').getTime();
+    // Parse "February 14, 2027" into a target Date (falls back to Feb 14 2027)
+    const parsed = new Date(weddingDate);
+    const targetDate = isNaN(parsed.getTime())
+      ? new Date('2027-02-14T00:00:00').getTime()
+      : parsed.getTime();
 
     const updateTimer = () => {
       const now = new Date().getTime();
@@ -89,7 +97,7 @@ export function SaveTheDateSection() {
     const timerId = setInterval(updateTimer, 1000);
 
     return () => clearInterval(timerId);
-  }, []);
+  }, [weddingDate]);
 
   const formatNumber = (num: number) => {
     return num.toString().padStart(2, '0');
@@ -135,16 +143,16 @@ export function SaveTheDateSection() {
 
             <p className="font-lato text-gold-accent/70 text-xs sm:text-sm tracking-[0.4em] uppercase mb-4 sm:mb-6">Save The Date</p>
             
-            <h2 className="font-cinzel text-cream text-2xl sm:text-4xl md:text-5xl mb-1 sm:mb-2">Vikram</h2>
+            <h2 className="font-cinzel text-cream text-2xl sm:text-4xl md:text-5xl mb-1 sm:mb-2">{groomName}</h2>
             <span className="font-vibes text-gold-accent text-xl sm:text-2xl md:text-3xl">&</span>
-            <h2 className="font-cinzel text-cream text-2xl sm:text-4xl md:text-5xl mt-1 sm:mt-2 mb-6 sm:mb-8">Kavya</h2>
+            <h2 className="font-cinzel text-cream text-2xl sm:text-4xl md:text-5xl mt-1 sm:mt-2 mb-6 sm:mb-8">{brideName}</h2>
 
             <GoldDivider width="60px" className="mb-6 sm:mb-8" withDiamond={false} />
 
             {/* Couple photo */}
             <div className="relative w-40 h-40 sm:w-48 sm:h-48 mx-auto mb-6 sm:mb-8 rounded-full overflow-hidden border-4 border-gold-accent/40 shadow-xl">
               <img
-                src="/images/couple.jpg"
+                src={images.couple}
                 alt="Couple"
                 className="w-full h-full object-cover"
               />
@@ -152,8 +160,8 @@ export function SaveTheDateSection() {
             </div>
 
             <div className="space-y-2">
-              <p className="font-cinzel text-gold-accent text-2xl">February 14, 2027</p>
-              <p className="font-lato text-cream/60 text-sm tracking-wider">The Grand Palace, Jaipur</p>
+              <p className="font-cinzel text-gold-accent text-2xl">{weddingDate}</p>
+              <p className="font-lato text-cream/60 text-sm tracking-wider">{venueName}, {venueCity}</p>
             </div>
 
             {/* Live Ticking Countdown */}
