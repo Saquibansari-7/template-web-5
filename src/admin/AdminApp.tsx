@@ -261,10 +261,7 @@ function CoupleDatePanel() {
           dateDay: '14',
           venueName: 'The Grand Palace',
           venueCity: 'Jaipur, Rajasthan, India',
-          heroPreLine: 'Together with their families',
-          heroRequestLine: 'Request the pleasure of your company',
           invitationPreLine: 'Together with their families',
-          invitationBody: 'Request the honour of your presence at the celebration of their marriage',
           invitationTimeText: 'at half past four in the afternoon',
         })
       }
@@ -275,13 +272,7 @@ function CoupleDatePanel() {
         <TextField label="Display Date" value={content.weddingDate} onChange={(v) => set({ weddingDate: v })} />
         <TextField label="Venue Name" value={content.venueName} onChange={(v) => set({ venueName: v })} />
         <TextField label="City / Location" value={content.venueCity} onChange={(v) => set({ venueCity: v })} />
-        <TextField label="Hero Pre-line" value={content.heroPreLine} onChange={(v) => set({ heroPreLine: v })} />
-        <TextField label="Hero Request Line" value={content.heroRequestLine} onChange={(v) => set({ heroRequestLine: v })} />
-        <TextField label="Invitation Body" value={content.invitationBody} onChange={(v) => set({ invitationBody: v })} />
       </div>
-      <p className="text-xs text-slate-500 mt-2">
-        Names &amp; date update the Hero, Save-the-Date, Footer, Monogram and Invitation automatically.
-      </p>
     </SectionCard>
   );
 }
@@ -308,16 +299,12 @@ function MapPanel() {
       toggle={{ checked: content.sections.map, onChange: (v) => set({ sections: { ...content.sections, map: v } }) }}
       onReset={() =>
         set({
-          mapHeading: 'Wedding Venue',
-          mapSub: 'Where two hearts become one',
           mapAddress: 'The Grand Palace, Jaipur, Rajasthan, India',
           mapEmbedUrl:
             'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3557.5!2d75.7873!3d26.9124!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMjbCsDU0JzQ0LjYiTiA3NcKwNDcnMTQuMyJF!5e0!3m2!1sen!2sin!4v1',
         })
       }
     >
-      <TextField label="Heading" value={content.mapHeading} onChange={(v) => set({ mapHeading: v })} />
-      <TextField label="Subtitle" value={content.mapSub} onChange={(v) => set({ mapSub: v })} />
       <TextField label="Venue Address" value={content.mapAddress} onChange={(v) => set({ mapAddress: v })} />
       <TextField
         label="Google Maps Embed URL"
@@ -326,7 +313,7 @@ function MapPanel() {
         textarea
       />
       <p className="text-xs text-slate-500">
-        Paste a Maps embed URL (Maps → Share → Embed a map → copy the src).
+        Paste a Maps embed URL.
       </p>
     </SectionCard>
   );
@@ -594,7 +581,7 @@ function SocialMediaPanel() {
   return (
     <SectionCard
       title="Footer Social Media"
-      onReset={() => set({ socialMedia: { id: '', no: '', email: '' } })}
+      onReset={() => set({ socialMedia: { instagram: '', whatsapp: '', email: '' } })}
     >
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4">
         <TextField
@@ -824,7 +811,7 @@ export function AdminApp() {
             {tab === 'sections' && <SectionsPanel />}
 
             <p className="text-xs text-slate-600 mt-4 text-center">
-              Edit any section, then press <span className="text-slate-400">Save</span> to store changes in Supabase.
+              Edit any section, then press <span className="text-slate-400">Save</span> to store changes in the website.
             </p>
           </div>
 
