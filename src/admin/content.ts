@@ -27,6 +27,13 @@ export interface GalleryItem {
   alt: string;
 }
 
+export interface BlessingItem {
+  id: number;
+  name: string;
+  message: string;
+  createdAt?: string;
+}
+
 export type SectionKey =
   | 'hero'
   | 'intro'
@@ -99,6 +106,7 @@ export interface WeddingContent {
   sendLoveMessageLabel: string;
   sendLovePlaceholder: string;
   blessingsHeading: string;
+  blessings: BlessingItem[];
 
   /* Travel & Accommodation */
   travelHeading: string;
@@ -237,6 +245,7 @@ export const DEFAULT_CONTENT: WeddingContent = {
   sendLoveMessageLabel: 'Your Blessing',
   sendLovePlaceholder: 'Write your heartfelt wishes for the couple…',
   blessingsHeading: 'Blessings & Wishes',
+  blessings: [],
 
   travelHeading: 'Travel & Accommodation',
   travelSub: 'Everything you need for a comfortable journey',

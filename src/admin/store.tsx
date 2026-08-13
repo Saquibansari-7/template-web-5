@@ -1,5 +1,5 @@
 import { createContext, useCallback, useContext, useEffect, useState, type ReactNode } from 'react';
-import { DEFAULT_CONTENT, type WeddingContent } from './content';
+import { DEFAULT_CONTENT, type WeddingContent, type BlessingItem } from './content';
 import { loadContent, saveContent, resetContent } from './dataLayer';
 
 interface ContentContextValue {
@@ -8,6 +8,8 @@ interface ContentContextValue {
   dirty: boolean;
   update: (patch: Partial<WeddingContent>) => void;
   updateImage: (key: keyof WeddingContent['images'], value: string) => void;
+  addBlessing: (name: string, message: string) => void;
+  removeBlessing: (id: number) => void;
   save: () => Promise<'ok' | 'error'>;
   reset: () => void;
 }
@@ -41,6 +43,35 @@ export function ContentProvider({ children }: { children: ReactNode }) {
     setDirty(true);
   }, []);
 
+  const addBlessing = useCallback((name: string, message: string) => {
+    const next: WeddingContent = {
+      ...content,
+      blessings: [
+        { id: Date.now(), name, message, createdAt: new Date().toISOString() },
+        ...content.blessings,
+      ],
+    };
+    setContent(next);
+    setDirty(true);
+    // Persist immediately so blessings are visible in the admin panel
+    // (and for other visitors) without requiring a manual Save.
+    void saveContent(next).catch((err) => {
+      if (import.meta.env.DEV) console.error('[addBlessing] save failed:', err);
+    });
+  }, [content]);
+
+  const removeBlessing = useCallback((id: number) => {
+    const next: WeddingContent = {
+      ...content,
+      blessings: content.blessings.filter((b) => b.id !== id),
+    };
+    setContent(next);
+    setDirty(true);
+    void saveContent(next).catch((err) => {
+      if (import.meta.env.DEV) console.error('[removeBlessing] save failed:', err);
+    });
+  }, [content]);
+
   const save = useCallback(async (): Promise<'ok' | 'error'> => {
     try {
       const snapshot = content;
@@ -61,7 +92,7 @@ export function ContentProvider({ children }: { children: ReactNode }) {
   }, []);
 
   return (
-    <ContentContext.Provider value={{ content, ready, dirty, update, updateImage, save, reset }}>
+    <ContentContext.Provider value={{ content, ready, dirty, update, updateImage, addBlessing, removeBlessing, save, reset }}>
       {children}
     </ContentContext.Provider>
   );

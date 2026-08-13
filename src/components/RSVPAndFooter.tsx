@@ -19,10 +19,9 @@ let sparkleIdCounter = 0;
 const SPARKLE_EMOJIS = ['✨', '💫', '🌸', '💖', '🪷', '⭐'];
 
 export function SendLoveSection() {
-  const { content } = useContent();
+  const { content, addBlessing } = useContent();
   const [message, setMessage] = useState('');
   const [name, setName] = useState('');
-  const [blessings, setBlessings] = useState<{ id: number; name: string; message: string }[]>([]);
   const [sparkles, setSparkles] = useState<Sparkle[]>([]);
 
   const spawnSparkles = useCallback(() => {
@@ -45,7 +44,7 @@ export function SendLoveSection() {
   const handleSend = () => {
     if (!message.trim()) return;
     const guestName = name.trim() || 'A Loving Guest';
-    setBlessings((prev) => [{ id: Date.now(), name: guestName, message: message.trim() }, ...prev]);
+    addBlessing(guestName, message.trim());
     setMessage('');
     setName('');
     spawnSparkles();
@@ -169,7 +168,7 @@ export function SendLoveSection() {
 
         {/* ── Blessings wall ── */}
         <AnimatePresence>
-          {blessings.length > 0 && (
+          {content.blessings.length > 0 && (
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
@@ -183,7 +182,7 @@ export function SendLoveSection() {
 
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
                 <AnimatePresence mode="popLayout">
-                  {blessings.map((b, i) => (
+                  {content.blessings.map((b, i) => (
                     <motion.div
                       key={b.id}
                       layout

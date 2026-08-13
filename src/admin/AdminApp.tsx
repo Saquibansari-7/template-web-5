@@ -554,7 +554,39 @@ function SectionsPanel() {
 
 /* ─── Sidebar + layout ─── */
 
-type Tab = 'couple' | 'images' | 'map' | 'story' | 'memories' | 'events' | 'travel' | 'sections';
+function BlessingsPanel() {
+  const { content, removeBlessing } = useContent();
+  return (
+    <SectionCard title="Blessings from Guests">
+      <p className="text-xs text-slate-500 mb-4">
+        Blessings submitted via “Send Your Love” on the site. Delete any you don’t want shown. Remember to press Save to persist changes.
+      </p>
+      {content.blessings.length === 0 ? (
+        <p className="text-sm text-slate-400">No blessings yet.</p>
+      ) : (
+        <div className="space-y-3">
+          {content.blessings.map((b) => (
+            <div key={b.id} className="flex items-start gap-3 border border-slate-700 rounded-lg p-3">
+              <div className="flex-1 min-w-0">
+                <p className="font-cinzel text-amber-300 text-sm">{b.name}</p>
+                <p className="font-playfair text-slate-200 text-sm italic mt-1 break-words">“{b.message}”</p>
+              </div>
+              <button
+                type="button"
+                onClick={() => removeBlessing(b.id)}
+                className="text-xs text-red-400 hover:text-red-300 whitespace-nowrap"
+              >
+                Delete
+              </button>
+            </div>
+          ))}
+        </div>
+      )}
+    </SectionCard>
+  );
+}
+
+type Tab = 'couple' | 'images' | 'map' | 'story' | 'memories' | 'events' | 'travel' | 'blessings' | 'sections';
 
 const TABS: { id: Tab; label: string }[] = [
   { id: 'couple', label: 'Couple & Date' },
@@ -564,12 +596,13 @@ const TABS: { id: Tab; label: string }[] = [
   { id: 'memories', label: 'Memories' },
   { id: 'events', label: 'Events' },
   { id: 'travel', label: 'Travel & Hotels' },
+  { id: 'blessings', label: 'Blessings' },
   { id: 'sections', label: 'Sections On/Off' },
 ];
 
 export function AdminApp() {
   const { authenticated, login, logout } = useAuth();
-  const { content, dirty, reset, save } = useContent();
+  const { content, dirty, reset, save, removeBlessing } = useContent();
   const [tab, setTab] = useState<Tab>('couple');
   const [pw, setPw] = useState('');
   const [err, setErr] = useState(false);
@@ -753,6 +786,7 @@ export function AdminApp() {
             {tab === 'memories' && <MemoriesPanel />}
             {tab === 'events' && <EventsPanel />}
             {tab === 'travel' && <TravelPanel />}
+            {tab === 'blessings' && <BlessingsPanel />}
             {tab === 'sections' && <SectionsPanel />}
 
             <p className="text-xs text-slate-600 mt-4 text-center">

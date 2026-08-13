@@ -42,6 +42,7 @@ export async function loadContent(): Promise<WeddingContent> {
     events: isArr(raw.events) ? (raw.events as WeddingContent['events']) : DEFAULT_CONTENT.events,
     travelInfo: isArr(raw.travelInfo) ? (raw.travelInfo as WeddingContent['travelInfo']) : DEFAULT_CONTENT.travelInfo,
     hotels: isArr(raw.hotels) ? (raw.hotels as WeddingContent['hotels']) : DEFAULT_CONTENT.hotels,
+    blessings: isArr(raw.blessings) ? (raw.blessings as WeddingContent['blessings']) : DEFAULT_CONTENT.blessings,
   };
 
   if (import.meta.env.DEV) console.log('[loadContent] loaded; gallery is array:', isArr(raw.gallery), 'events is array:', isArr(raw.events));
