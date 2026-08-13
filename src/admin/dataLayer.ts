@@ -1,70 +1,46 @@
 import { DEFAULT_CONTENT, type WeddingContent } from './content';
+import { loadContent as loadFromSupabase } from '../services/loadContent';
+import { saveContent as saveToSupabase } from '../services/saveContent';
 
 /**
- * Data layer abstraction.
+ * Data layer — backed by Supabase.
  *
- * Currently backed by localStorage (zero backend). To connect a real backend
- * (Supabase), implement the same async shape in `loadContent` / `saveContent`
- * / `resetContent` (e.g. read/write a single row in a `wedding_content` table)
- * and the rest of the app — store, admin panel, and the site — keeps working
- * unchanged.
+ * One row in `wedding_content` (id = 1) holds the entire WeddingContent jsonb.
+ * loadContent falls back to DEFAULT_CONTENT when Supabase is not configured or
+ * the row is missing, so the public site always renders. saveContent throws a
+ * clear error if Supabase is not configured (the admin panel surfaces it).
  *
- * Suggested Supabase schema (single-row config table):
- *   create table wedding_content (
- *     id int primary key default 1,
- *     data jsonb not null,
- *     updated_at timestamptz default now()
- *   );
- *   insert into wedding_content (id, data) values (1, '{}');
+ * Images are uploaded to Supabase Storage via `uploadImage` and stored as
+ * public URLs inside WeddingContent.images / gallery.
  */
 
-const STORAGE_KEY = 'wedding_content_v1';
-
-function deepMerge(base: WeddingContent, override: Partial<WeddingContent>): WeddingContent {
-  return {
-    ...base,
-    ...override,
-    sections: { ...base.sections, ...(override.sections ?? {}) },
-    images: { ...base.images, ...(override.images ?? {}) },
-    storyParagraphs: override.storyParagraphs ?? base.storyParagraphs,
-    gallery: override.gallery ?? base.gallery,
-    events: override.events ?? base.events,
-    travelInfo: override.travelInfo ?? base.travelInfo,
-    hotels: override.hotels ?? base.hotels,
-  };
-}
+const CONFIG_ERROR =
+  'Supabase not configured — add VITE_PUBLIC_SUPABASE_URL and VITE_PUBLIC_SUPABASE_PUBLISHABLE_KEY to .env';
 
 export async function loadContent(): Promise<WeddingContent> {
   try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if (!raw) return structuredClone(DEFAULT_CONTENT);
-    const parsed = JSON.parse(raw) as Partial<WeddingContent>;
-    return deepMerge(structuredClone(DEFAULT_CONTENT), parsed);
-  } catch {
+    return await loadFromSupabase();
+  } catch (err) {
+    if (import.meta.env.DEV) console.error('[dataLayer] loadContent failed, using defaults:', err);
     return structuredClone(DEFAULT_CONTENT);
   }
 }
 
 export async function saveContent(content: WeddingContent): Promise<void> {
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(content));
+  await saveToSupabase(content);
 }
 
 export async function resetContent(): Promise<WeddingContent> {
+  // Reset = save the defaults back to Supabase.
   const fresh = structuredClone(DEFAULT_CONTENT);
-  localStorage.setItem(STORAGE_KEY, JSON.stringify(fresh));
+  await saveToSupabase(fresh);
   return fresh;
 }
 
-/**
- * Convert an uploaded File into a base64 data URL, suitable for storing in
- * localStorage or a jsonb column. Resolves to a string usable directly as an
- * <img src>.
- */
-export function fileToDataUrl(file: File): Promise<string> {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = () => resolve(reader.result as string);
-    reader.onerror = reject;
-    reader.readAsDataURL(file);
-  });
+export function isSupabaseConfigured(): boolean {
+  // Reuse the service guard indirectly: loadContent handles null client,
+  // but admin wants to know up-front. We expose a simple check.
+  return Boolean(import.meta.env.VITE_PUBLIC_SUPABASE_URL && import.meta.env.VITE_PUBLIC_SUPABASE_PUBLISHABLE_KEY);
 }
+
+export { CONFIG_ERROR };

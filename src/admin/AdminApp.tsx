@@ -1,8 +1,9 @@
 import { useRef, useState, type ReactNode } from 'react';
 import { useContent } from './store';
-import { fileToDataUrl } from './dataLayer';
+import { uploadImage } from '../services/uploadImage';
+import { isSupabaseConfigured } from '../admin/dataLayer';
 import { useAuth } from './auth';
-import { ALL_SECTIONS, type WeddingContent } from './content';
+import { ALL_SECTIONS, DEFAULT_CONTENT, type WeddingContent } from './content';
 
 /* ─── Reusable form primitives ─── */
 
@@ -80,12 +81,23 @@ function ImageField({
 }) {
   const { content, updateImage } = useContent();
   const inputRef = useRef<HTMLInputElement>(null);
+  const [busy, setBusy] = useState(false);
+  const [err, setErr] = useState('');
   const src = content.images[imgKey];
 
   const onFile = async (file?: File) => {
     if (!file) return;
-    const dataUrl = await fileToDataUrl(file);
-    updateImage(imgKey, dataUrl);
+    setBusy(true);
+    setErr('');
+    try {
+      const url = await uploadImage(file);
+      if (!url) throw new Error('Upload returned no URL');
+      updateImage(imgKey, url);
+    } catch (e) {
+      setErr(e instanceof Error ? e.message : 'Upload failed');
+    } finally {
+      setBusy(false);
+    }
   };
 
   return (
@@ -110,32 +122,43 @@ function ImageField({
             onClick={() => inputRef.current?.click()}
             className="px-3 py-2 rounded-lg bg-slate-700 hover:bg-slate-600 text-sm text-slate-100 transition"
           >
-            Choose image
+            {busy ? 'Uploading…' : 'Choose image'}
           </button>
           <button
             type="button"
-            onClick={() => updateImage(imgKey, '')}
+            onClick={() => updateImage(imgKey, DEFAULT_CONTENT.images[imgKey])}
             className="ml-2 px-3 py-2 rounded-lg text-sm text-slate-400 hover:text-red-400 transition"
           >
             Reset
           </button>
-          <p className="text-[11px] text-slate-500 mt-2 break-all">{src.slice(0, 48)}</p>
+          {err && <p className="text-[11px] text-red-400 mt-2">{err}</p>}
+          {!err && <p className="text-[11px] text-slate-500 mt-2 break-all">{src.slice(0, 48)}</p>}
         </div>
       </div>
     </div>
   );
 }
 
-/* Gallery image upload (base64) */
+/* Gallery image upload (Supabase Storage) */
 function GalleryManager() {
   const { content, update } = useContent();
   const inputRef = useRef<HTMLInputElement>(null);
+  const [busy, setBusy] = useState(false);
+  const [err, setErr] = useState('');
 
   const onFile = async (file?: File) => {
     if (!file) return;
-    const dataUrl = await fileToDataUrl(file);
-    const next = [...content.gallery, { src: dataUrl, alt: 'Photo' }];
-    update({ gallery: next });
+    setBusy(true);
+    setErr('');
+    try {
+      const url = await uploadImage(file);
+      if (!url) throw new Error('Upload returned no URL');
+      update({ gallery: [...content.gallery, { src: url, alt: 'Photo' }] });
+    } catch (e) {
+      setErr(e instanceof Error ? e.message : 'Upload failed');
+    } finally {
+      setBusy(false);
+    }
   };
 
   const setAlt = (i: number, alt: string) => {
@@ -170,9 +193,10 @@ function GalleryManager() {
       <button
         type="button"
         onClick={() => inputRef.current?.click()}
+        disabled={busy}
         className="border border-dashed border-slate-600 rounded-lg flex items-center justify-center text-slate-400 hover:text-amber-300 hover:border-amber-400 transition text-sm min-h-[140px]"
       >
-        + Upload Photo
+        {busy ? 'Uploading…' : '+ Upload Photo'}
       </button>
       <input
         ref={inputRef}
@@ -181,6 +205,7 @@ function GalleryManager() {
         className="hidden"
         onChange={(e) => onFile(e.target.files?.[0])}
       />
+      {err && <p className="text-xs text-red-400 mt-2 col-span-full">{err}</p>}
     </div>
   );
 }
@@ -544,10 +569,24 @@ const TABS: { id: Tab; label: string }[] = [
 
 export function AdminApp() {
   const { authenticated, login, logout } = useAuth();
-  const { content, reset } = useContent();
+  const { content, dirty, reset, save } = useContent();
   const [tab, setTab] = useState<Tab>('couple');
   const [pw, setPw] = useState('');
   const [err, setErr] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [toast, setToast] = useState<{ kind: 'ok' | 'error'; msg: string } | null>(null);
+
+  const handleSave = async () => {
+    setSaving(true);
+    const result = await save();
+    setSaving(false);
+    setToast(
+      result === 'ok'
+        ? { kind: 'ok', msg: 'Saved successfully ✓' }
+        : { kind: 'error', msg: 'Save failed — check Supabase connection' },
+    );
+    window.setTimeout(() => setToast(null), 3000);
+  };
 
   if (!authenticated) {
     return (
@@ -673,18 +712,38 @@ export function AdminApp() {
         {/* Main */}
         <main className="flex-1 sm:ml-60 p-4 sm:p-6 lg:p-10">
           <div className="max-w-3xl mx-auto">
+            {!isSupabaseConfigured() && (
+              <div className="mb-5 rounded-lg border border-amber-500/40 bg-amber-500/10 px-4 py-3 text-xs text-amber-200">
+                Supabase is not configured. Add <code className="font-mono">VITE_PUBLIC_SUPABASE_URL</code> and{' '}
+                <code className="font-mono">VITE_PUBLIC_SUPABASE_PUBLISHABLE_KEY</code> to your <code className="font-mono">.env</code>.
+                Changes are shown here but won't be saved until Supabase is connected.
+              </div>
+            )}
             <div className="flex items-center justify-between mb-5 sm:mb-6 gap-3">
               <h2 className="text-xl sm:text-2xl font-semibold text-slate-100 truncate">
                 {TABS.find((t) => t.id === tab)?.label}
               </h2>
-              <button
-                onClick={() => {
-                  if (confirm('Reset ALL content to defaults? This cannot be undone.')) reset();
-                }}
-                className="text-xs px-3 py-2 rounded-lg bg-red-500/15 hover:bg-red-500/25 text-red-300 transition whitespace-nowrap"
-              >
-                Reset All
-              </button>
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={handleSave}
+                  disabled={saving || !dirty}
+                  className={`text-sm sm:text-base px-6 py-3 rounded-xl font-bold shadow-lg transition whitespace-nowrap ${
+                    dirty
+                      ? 'bg-amber-500 hover:bg-amber-400 text-slate-900 shadow-amber-500/30'
+                      : 'bg-slate-700 text-slate-400 cursor-default shadow-none'
+                  }`}
+                >
+                  {saving ? 'Saving…' : dirty ? '💾 Save Changes' : '✓ Saved'}
+                </button>
+                <button
+                  onClick={() => {
+                    if (confirm('Reset ALL content to defaults? This cannot be undone.')) reset();
+                  }}
+                  className="text-xs px-3 py-2 rounded-lg bg-red-500/15 hover:bg-red-500/25 text-red-300 transition whitespace-nowrap"
+                >
+                  Reset All
+                </button>
+              </div>
             </div>
 
             {tab === 'couple' && <CoupleDatePanel />}
@@ -697,9 +756,22 @@ export function AdminApp() {
             {tab === 'sections' && <SectionsPanel />}
 
             <p className="text-xs text-slate-600 mt-4 text-center">
-              Changes save automatically to local storage. Connect Supabase later for shared persistence.
+              Edit any section, then press <span className="text-slate-400">Save</span> to store changes in Supabase.
             </p>
           </div>
+
+          {/* Toast */}
+          {toast && (
+            <div
+              className={`fixed bottom-5 left-1/2 -translate-x-1/2 z-50 px-5 py-3 rounded-lg shadow-lg text-sm font-medium transition ${
+                toast.kind === 'ok'
+                  ? 'bg-emerald-600 text-white'
+                  : 'bg-red-600 text-white'
+              }`}
+            >
+              {toast.msg}
+            </div>
+          )}
         </main>
       </div>
     </div>
