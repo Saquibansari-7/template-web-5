@@ -586,7 +586,39 @@ function BlessingsPanel() {
   );
 }
 
-type Tab = 'couple' | 'images' | 'map' | 'story' | 'memories' | 'events' | 'travel' | 'blessings' | 'sections';
+type Tab = 'couple' | 'images' | 'map' | 'story' | 'memories' | 'events' | 'travel' | 'blessings' | 'social' | 'sections';
+
+function SocialMediaPanel() {
+  const { content, update } = useContent();
+  const set = (patch: Partial<WeddingContent>) => update(patch);
+  return (
+    <SectionCard
+      title="Footer Social Media"
+      onReset={() => set({ socialMedia: { id: '', no: '', email: '' } })}
+    >
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4">
+        <TextField
+          label="Instagram ID"
+          value={content.socialMedia.instagram}
+          onChange={(v) => set({ socialMedia: { ...content.socialMedia, instagram: v } })}
+        />
+        <TextField
+          label="WhatsApp No."
+          value={content.socialMedia.whatsapp}
+          onChange={(v) => set({ socialMedia: { ...content.socialMedia, whatsapp: v } })}
+        />
+        <TextField
+          label="Email"
+          value={content.socialMedia.email}
+          onChange={(v) => set({ socialMedia: { ...content.socialMedia, email: v } })}
+        />
+      </div>
+      <p className="text-xs text-slate-500 mt-2">
+        Instagram handle, WhatsApp number and email used in the footer social links.
+      </p>
+    </SectionCard>
+  );
+}
 
 const TABS: { id: Tab; label: string }[] = [
   { id: 'couple', label: 'Couple & Date' },
@@ -597,6 +629,7 @@ const TABS: { id: Tab; label: string }[] = [
   { id: 'events', label: 'Events' },
   { id: 'travel', label: 'Travel & Hotels' },
   { id: 'blessings', label: 'Blessings' },
+  { id: 'social', label: 'Social Media' },
   { id: 'sections', label: 'Sections On/Off' },
 ];
 
@@ -787,6 +820,7 @@ export function AdminApp() {
             {tab === 'events' && <EventsPanel />}
             {tab === 'travel' && <TravelPanel />}
             {tab === 'blessings' && <BlessingsPanel />}
+            {tab === 'social' && <SocialMediaPanel />}
             {tab === 'sections' && <SectionsPanel />}
 
             <p className="text-xs text-slate-600 mt-4 text-center">

@@ -114,6 +114,13 @@ export interface WeddingContent {
   travelInfo: TravelItem[];
   hotelsHeading: string;
   hotels: HotelItem[];
+
+  /* Footer social media */
+  socialMedia: {
+    instagram: string; // Instagram handle / id
+    whatsapp: string; // WhatsApp number
+    email: string;
+  };
 }
 
 export const ALL_SECTIONS: { key: SectionKey; label: string }[] = [
@@ -261,4 +268,10 @@ export const DEFAULT_CONTENT: WeddingContent = {
     enabledHotel('Mid-Range', 'hotel', 'ITC Rajputana, Holiday Inn Jaipur', 'Comfortable & convenient'),
     enabledHotel('Budget', 'budget', 'Zostel Jaipur, Hotel Pearl Palace', 'Affordable & well-rated'),
   ],
+
+  socialMedia: {
+    instagram: '',
+    whatsapp: '',
+    email: '',
+  },
 };
