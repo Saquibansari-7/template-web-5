@@ -8,7 +8,6 @@ interface Props {
 
 const gold1 = '#D4A017';
 const gold2 = '#F2C94C';
-const wine = '#8B0000';
 
 /* Elegant thin-stroke SVG icons in the gold/wine palette */
 export default function PremiumIcon({ name, size = 40, className = '' }: Props) {

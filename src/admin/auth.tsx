@@ -1,4 +1,6 @@
-import { createContext, useCallback, useContext, useEffect, useState, type ReactNode } from 'react';
+import { createContext, useCallback, useContext, useState, type ReactNode } from 'react';
+
+/* eslint-disable react-refresh/only-export-components */
 
 /**
  * Single hardcoded admin password. Change this constant to update the password.
@@ -16,11 +18,9 @@ interface AuthContextValue {
 const AuthContext = createContext<AuthContextValue | null>(null);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-  const [authenticated, setAuthenticated] = useState(false);
-
-  useEffect(() => {
-    setAuthenticated(localStorage.getItem(SESSION_KEY) === '1');
-  }, []);
+  const [authenticated, setAuthenticated] = useState(
+    () => localStorage.getItem(SESSION_KEY) === '1',
+  );
 
   const login = useCallback((password: string) => {
     if (password === ADMIN_PASSWORD) {

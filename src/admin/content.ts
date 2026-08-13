@@ -58,9 +58,6 @@ export interface WeddingContent {
   groomName: string;
   brideName: string;
   weddingDate: string; // display string e.g. "February 14, 2027"
-  dateYear: string; // e.g. "2027"
-  dateMonth: string; // e.g. "February"
-  dateDay: string; // e.g. "14"
   venueName: string;
   venueCity: string;
 
@@ -175,9 +172,6 @@ export const DEFAULT_CONTENT: WeddingContent = {
   groomName: 'Vikram',
   brideName: 'Kavya',
   weddingDate: 'February 14, 2027',
-  dateYear: '2027',
-  dateMonth: 'February',
-  dateDay: '14',
   venueName: 'The Grand Palace',
   venueCity: 'Jaipur, Rajasthan, India',
 

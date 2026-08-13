@@ -1,5 +1,7 @@
 import { createContext, useCallback, useContext, useEffect, useState, type ReactNode } from 'react';
-import { DEFAULT_CONTENT, type WeddingContent, type BlessingItem } from './content';
+
+/* eslint-disable react-refresh/only-export-components */
+import { DEFAULT_CONTENT, type WeddingContent } from './content';
 import { loadContent, saveContent, resetContent } from './dataLayer';
 
 interface ContentContextValue {

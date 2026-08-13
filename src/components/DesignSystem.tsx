@@ -95,7 +95,7 @@ export function InteractiveMapSection() {
 /* ─── Travel & Accommodation (replaces ColorPaletteSection) ─── */
 export function TravelAccommodationSection() {
   const { content } = useContent();
-  const { travelInfo, hotels, travelHeading, travelSub, hotelsHeading } = content;
+  const { travelInfo, hotels, travelHeading, hotelsHeading } = content;
 
   return (
     <section className="relative py-24 md:py-32 bg-cream overflow-hidden">

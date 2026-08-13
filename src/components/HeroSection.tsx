@@ -42,18 +42,6 @@ export default function HeroSection() {
             className="flex-1 text-center lg:text-left w-full lg:w-auto"
           >
             {/* Monogram */}
-            {/* <motion.div
-              initial={{ scale: 0 }}
-              animate={{ scale: 1 }}
-              transition={{ delay: 0.3, type: 'spring', stiffness: 100 }}
-              className="mb-8 inline-block"
-            >
-              <div className="w-28 h-28 rounded-full border-2 border-gold-accent flex items-center justify-center animate-pulse-glow"
-                style={{ background: 'radial-gradient(circle, rgba(212,160,23,0.2) 0%, transparent 70%)' }}>
-                <span className="font-vibes text-4xl text-gold-accent">VK</span>
-              </div>
-            </motion.div> */}
-
             <GoldDivider width="80px" className="mb-6 sm:mb-8 justify-center lg:justify-start" />
 
             <motion.p

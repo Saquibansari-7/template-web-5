@@ -256,9 +256,6 @@ function CoupleDatePanel() {
           groomName: 'Vikram',
           brideName: 'Kavya',
           weddingDate: 'February 14, 2027',
-          dateYear: '2027',
-          dateMonth: 'February',
-          dateDay: '14',
           venueName: 'The Grand Palace',
           venueCity: 'Jaipur, Rajasthan, India',
           invitationPreLine: 'Together with their families',
@@ -622,7 +619,7 @@ const TABS: { id: Tab; label: string }[] = [
 
 export function AdminApp() {
   const { authenticated, login, logout } = useAuth();
-  const { content, dirty, reset, save, removeBlessing } = useContent();
+  const { content, dirty, reset, save } = useContent();
   const [tab, setTab] = useState<Tab>('couple');
   const [pw, setPw] = useState('');
   const [err, setErr] = useState(false);
