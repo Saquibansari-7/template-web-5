@@ -15,12 +15,10 @@ function PublicSite() {
   const [opened, setOpened] = useState(false)
   return (
     <>
+      <ContentProvider>
+        <App />
+      </ContentProvider>
       {!opened && <OpeningAnimation onOpen={() => setOpened(true)} />}
-      {opened && (
-        <ContentProvider>
-          <App />
-        </ContentProvider>
-      )}
     </>
   )
 }

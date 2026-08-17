@@ -23,14 +23,27 @@
   height: 100vh;
   height: 100dvh;
   overflow: hidden;
-  background: #050505;
+  background: radial-gradient(circle at 50% 40%, #6B0000 0%, #8B0000 45%, #4a0000 100%);
+}
+
+/* thin inner gold frame, matching the wedding theme */
+#scene::after {
+  content: '';
+  position: absolute;
+  inset: 14px;
+  border: 1px solid rgba(242, 201, 76, 0.25);
+  border-radius: 4px;
+  pointer-events: none;
+  z-index: 1;
 }
 
 .gate {
   position: absolute;
   top: 50%;
   height: 100%;
-  width: auto;
+  width: 50vw;
+  object-fit: cover;
+  object-position: center;
   z-index: 10;
   transform: translateY(-50%);
   user-select: none;
@@ -85,19 +98,6 @@
     width: 120px;
     top: 55%;
   }
-}
-
-#lightBurst {
-  position: absolute;
-  inset: 0;
-  background:
-    radial-gradient(circle,
-      rgba(255, 230, 150, .95) 0%,
-      rgba(255, 210, 100, .4) 25%,
-      transparent 70%);
-  opacity: 0;
-  z-index: 5;
-  pointer-events: none;
 }
 
 /* Smooth scrolling */

@@ -8,8 +8,8 @@ import sealImg from '../assets/opening/h-stamp.png';
 
 export default function OpeningAnimation({ onOpen }: { onOpen: () => void }) {
   const [done, setDone] = useState(false);
+  const sceneRef = useRef<HTMLDivElement>(null);
   const sealRef = useRef<HTMLImageElement>(null);
-  const lightRef = useRef<HTMLDivElement>(null);
   const leftGateDRef = useRef<HTMLImageElement>(null);
   const rightGateDRef = useRef<HTMLImageElement>(null);
   const leftGateMRef = useRef<HTMLImageElement>(null);
@@ -50,25 +50,38 @@ export default function OpeningAnimation({ onOpen }: { onOpen: () => void }) {
 
     tl.to(seal, { scale: 1.4, rotation: 15, duration: 0.3 })
       .to(seal, { scale: 0, opacity: 0, duration: 0.6, ease: 'back.in(2)' })
-      .to(lightRef.current, { opacity: 1, duration: 0.5 }, '-=0.3')
-      .to(lightRef.current, { opacity: 0, duration: 1.2 })
       .to(
         [leftGateDRef.current, leftGateMRef.current],
         { x: '-50vw', duration: 2.5, ease: 'power4.inOut' },
-        '-=1'
+        '-=0.4'
       )
       .to(
         [rightGateDRef.current, rightGateMRef.current],
         { x: '50vw', duration: 2.5, ease: 'power4.inOut' },
         '<'
-      );
+      )
+      // once the gates are open, the dark scene softly dissolves like mist
+      // clearing to reveal the site underneath
+      .to(sceneRef.current, { opacity: 0, duration: 1.6, ease: 'power2.inOut' }, '-=0.2');
   };
+
+ useEffect(() => {
+    const prevOverflow = document.body.style.overflow;
+    const prevTouch = document.body.style.touchAction;
+    document.body.style.overflow = 'hidden';
+    document.body.style.touchAction = 'none';
+    return () => {
+      document.body.style.overflow = prevOverflow;
+      document.body.style.touchAction = prevTouch;
+    };
+  }, []);
 
   if (done) return null;
 
   return (
     <div
       id="scene"
+      ref={sceneRef}
       style={{
         position: 'fixed',
         inset: 0,
@@ -76,14 +89,10 @@ export default function OpeningAnimation({ onOpen }: { onOpen: () => void }) {
         width: '100vw',
         height: '100dvh',
         overflow: 'hidden',
-        background: '#050505',
+        background:
+          'radial-gradient(circle at 50% 40%, #6B0000 0%, #8B0000 45%, #4a0000 100%)',
       }}
     >
-      <div
-        id="lightBurst"
-        ref={lightRef}
-      />
-
       <img ref={leftGateDRef} src={leftGateD} alt="" className="gate gateDesktop" id="leftGateD" />
       <img ref={rightGateDRef} src={rightGateD} alt="" className="gate gateDesktop" id="rightGateD" />
       <img ref={leftGateMRef} src={leftGateM} alt="" className="gate gateMobile" id="leftGateM" />
