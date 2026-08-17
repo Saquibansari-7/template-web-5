@@ -121,6 +121,68 @@
   }
 }
 
+/* ─── Rotating music disk ─── */
+.music-disk {
+  bottom: 18px;
+  right: 18px;
+  width: 56px;
+  height: 56px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  filter: drop-shadow(0 4px 14px rgba(0, 0, 0, 0.45));
+}
+
+.music-disk__vinyl {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background:
+    repeating-radial-gradient(circle at 50% 50%, #1a0303 0 2px, #2a0606 2px 4px),
+    radial-gradient(circle at 50% 50%, #8B0000 0%, #4a0000 70%);
+  border: 2px solid rgba(242, 201, 76, 0.7);
+  box-shadow: 0 0 0 3px rgba(139, 0, 0, 0.5), inset 0 0 10px rgba(0, 0, 0, 0.6);
+  position: relative;
+}
+
+.music-disk__label {
+  position: absolute;
+  inset: 28%;
+  border-radius: 50%;
+  background: radial-gradient(circle at 50% 50%, #F2C94C 0%, #D4A017 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: inset 0 0 4px rgba(0, 0, 0, 0.3);
+}
+
+.music-disk__note {
+  font-size: 14px;
+  color: #6B0000;
+  line-height: 1;
+}
+
+.music-disk__vinyl.is-spinning {
+  animation: disk-spin 4s linear infinite;
+}
+
+@keyframes disk-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Keep the disk bottom-right on small screens, matching desktop */
+@media (max-width: 640px) {
+  .music-disk {
+    bottom: 14px;
+    right: 14px;
+    width: 50px;
+    height: 50px;
+  }
+}
+
 /* Smooth scrolling */
 html {
   scroll-behavior: smooth;

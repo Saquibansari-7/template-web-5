@@ -5,6 +5,7 @@ import rightGateD from '../assets/opening/right-h-gate-d.png';
 import leftGateM from '../assets/opening/left-h-gate-mo.png';
 import rightGateM from '../assets/opening/right-h-gate-mo.png';
 import sealImg from '../assets/opening/h-stamp.png';
+import { useMusic } from './MusicProvider';
 
 export default function OpeningAnimation({ onOpen }: { onOpen: () => void }) {
   const [done, setDone] = useState(false);
@@ -14,6 +15,7 @@ export default function OpeningAnimation({ onOpen }: { onOpen: () => void }) {
   const leftGateMRef = useRef<HTMLImageElement>(null);
   const rightGateMRef = useRef<HTMLImageElement>(null);
   const openedRef = useRef(false);
+  const { play } = useMusic();
 
   useEffect(() => {
     // center each seal horizontally via transform, keep its own CSS top (desktop vs mobile)
@@ -45,6 +47,8 @@ export default function OpeningAnimation({ onOpen }: { onOpen: () => void }) {
   const startShow = () => {
     if (openedRef.current) return;
     openedRef.current = true;
+
+    play();
 
     gsap.killTweensOf('.seal');
     gsap.set('.seal', { pointerEvents: 'none' });

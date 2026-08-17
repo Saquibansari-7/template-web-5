@@ -1,10 +1,12 @@
 import { motion } from 'framer-motion';
 import GoldDivider from './GoldDivider';
 import { useContent } from '../admin/store';
+import { useMusic } from './MusicProvider';
 
 export default function HeroSection() {
   const { content } = useContent();
   const { groomName, brideName, weddingDate, heroPreLine, heroRequestLine, images } = content;
+  const { isPlaying, toggle } = useMusic();
 
   return (
     <section className="relative min-h-screen overflow-hidden">
@@ -129,6 +131,20 @@ export default function HeroSection() {
           </motion.div>
         </div>
       </div>
+
+      {/* Rotating music disk — toggle playback */}
+      <button
+        type="button"
+        onClick={toggle}
+        aria-label={isPlaying ? 'Pause music' : 'Play music'}
+        className="music-disk fixed z-40"
+      >
+        <span className={`music-disk__vinyl ${isPlaying ? 'is-spinning' : ''}`}>
+          <span className="music-disk__label">
+            <span className="music-disk__note">{isPlaying ? '♪' : '🔇'}</span>
+          </span>
+        </span>
+      </button>
     </section>
   );
 }

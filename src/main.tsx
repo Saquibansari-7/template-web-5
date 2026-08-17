@@ -8,18 +8,19 @@ import { AuthProvider } from './admin/auth.tsx'
 import { AdminApp } from './admin/AdminApp.tsx'
 import { ErrorBoundary } from './admin/ErrorBoundary.tsx'
 import OpeningAnimation from './components/OpeningAnimation.tsx'
+import { MusicProvider } from './components/MusicProvider.tsx'
 
 const isAdmin = window.location.pathname.startsWith('/admin')
 
 function PublicSite() {
   const [opened, setOpened] = useState(false)
   return (
-    <>
+    <MusicProvider>
       <ContentProvider>
         <App />
       </ContentProvider>
       {!opened && <OpeningAnimation onOpen={() => setOpened(true)} />}
-    </>
+    </MusicProvider>
   )
 }
 
