@@ -9,7 +9,6 @@ import sealImg from '../assets/opening/h-stamp.png';
 export default function OpeningAnimation({ onOpen }: { onOpen: () => void }) {
   const [done, setDone] = useState(false);
   const sceneRef = useRef<HTMLDivElement>(null);
-  const sealRef = useRef<HTMLImageElement>(null);
   const leftGateDRef = useRef<HTMLImageElement>(null);
   const rightGateDRef = useRef<HTMLImageElement>(null);
   const leftGateMRef = useRef<HTMLImageElement>(null);
@@ -17,10 +16,9 @@ export default function OpeningAnimation({ onOpen }: { onOpen: () => void }) {
   const openedRef = useRef(false);
 
   useEffect(() => {
-    const seal = sealRef.current;
-    if (!seal) return;
-    gsap.set(seal, { xPercent: -50, yPercent: -50, left: '50%', top: '45%', x: 0, y: 0 });
-    const breathe = gsap.to(seal, {
+    // center each seal horizontally via transform, keep its own CSS top (desktop vs mobile)
+    gsap.set('.seal', { xPercent: -50, x: 0, y: 0 });
+    const breathe = gsap.to('.seal', {
       scale: 1.08,
       duration: 1.4,
       ease: 'sine.inOut',
@@ -33,13 +31,23 @@ export default function OpeningAnimation({ onOpen }: { onOpen: () => void }) {
     };
   }, []);
 
+  useEffect(() => {
+    const prevOverflow = document.body.style.overflow;
+    const prevTouch = document.body.style.touchAction;
+    document.body.style.overflow = 'hidden';
+    document.body.style.touchAction = 'none';
+    return () => {
+      document.body.style.overflow = prevOverflow;
+      document.body.style.touchAction = prevTouch;
+    };
+  }, []);
+
   const startShow = () => {
     if (openedRef.current) return;
     openedRef.current = true;
 
-    const seal = sealRef.current;
-    if (seal) seal.style.pointerEvents = 'none';
-    gsap.killTweensOf(seal);
+    gsap.killTweensOf('.seal');
+    gsap.set('.seal', { pointerEvents: 'none' });
 
     const tl = gsap.timeline({
       onComplete: () => {
@@ -48,8 +56,8 @@ export default function OpeningAnimation({ onOpen }: { onOpen: () => void }) {
       },
     });
 
-    tl.to(seal, { scale: 1.4, rotation: 15, duration: 0.3 })
-      .to(seal, { scale: 0, opacity: 0, duration: 0.6, ease: 'back.in(2)' })
+    tl.to('.seal', { scale: 1.4, rotation: 15, duration: 0.3 })
+      .to('.seal', { scale: 0, opacity: 0, duration: 0.6, ease: 'back.in(2)' })
       .to(
         [leftGateDRef.current, leftGateMRef.current],
         { x: '-50vw', duration: 2.5, ease: 'power4.inOut' },
@@ -60,21 +68,8 @@ export default function OpeningAnimation({ onOpen }: { onOpen: () => void }) {
         { x: '50vw', duration: 2.5, ease: 'power4.inOut' },
         '<'
       )
-      // once the gates are open, the dark scene softly dissolves like mist
-      // clearing to reveal the site underneath
       .to(sceneRef.current, { opacity: 0, duration: 1.6, ease: 'power2.inOut' }, '-=0.2');
   };
-
- useEffect(() => {
-    const prevOverflow = document.body.style.overflow;
-    const prevTouch = document.body.style.touchAction;
-    document.body.style.overflow = 'hidden';
-    document.body.style.touchAction = 'none';
-    return () => {
-      document.body.style.overflow = prevOverflow;
-      document.body.style.touchAction = prevTouch;
-    };
-  }, []);
 
   if (done) return null;
 
@@ -98,7 +93,8 @@ export default function OpeningAnimation({ onOpen }: { onOpen: () => void }) {
       <img ref={leftGateMRef} src={leftGateM} alt="" className="gate gateMobile" id="leftGateM" />
       <img ref={rightGateMRef} src={rightGateM} alt="" className="gate gateMobile" id="rightGateM" />
 
-      <img ref={sealRef} src={sealImg} alt="Tap to open" className="seal" id="seal" onClick={startShow} />
+      <img src={sealImg} alt="Tap to open" className="seal sealDesktop" id="sealD" onClick={startShow} />
+      <img src={sealImg} alt="Tap to open" className="seal sealMobile" id="sealM" onClick={startShow} />
     </div>
   );
 }
