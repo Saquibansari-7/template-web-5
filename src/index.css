@@ -16,6 +16,90 @@
   --font-vibes: 'Great Vibes', cursive;
 }
 
+/* ─── Opening animation (mirrors opening222-copyyyy) ─── */
+#scene {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  height: 100dvh;
+  overflow: hidden;
+  background: #050505;
+}
+
+.gate {
+  position: absolute;
+  top: 50%;
+  height: 100%;
+  width: auto;
+  z-index: 10;
+  transform: translateY(-50%);
+  user-select: none;
+  -webkit-user-drag: none;
+  pointer-events: none;
+}
+
+.gateDesktop {
+  right: 50%;
+  transform: translateY(-50%);
+}
+
+.gateMobile {
+  right: 50%;
+  transform: translateY(-50%);
+  display: none;
+}
+
+#rightGateD,
+#rightGateM {
+  left: 50%;
+  transform: translateY(-50%);
+}
+
+@media (max-width: 768px) {
+  .gateDesktop {
+    display: none;
+  }
+
+  .gateMobile {
+    display: block;
+  }
+}
+
+.seal {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 120px;
+  transform: translate(-50%, -50%);
+  cursor: pointer;
+  z-index: 20;
+  filter: drop-shadow(0 0 30px rgb(125, 116, 66));
+  user-select: none;
+  -webkit-user-drag: none;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+@media (max-width: 768px) {
+  .seal {
+    width: 120px;
+    top: 55%;
+  }
+}
+
+#lightBurst {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle,
+      rgba(255, 230, 150, .95) 0%,
+      rgba(255, 210, 100, .4) 25%,
+      transparent 70%);
+  opacity: 0;
+  z-index: 5;
+  pointer-events: none;
+}
+
 /* Smooth scrolling */
 html {
   scroll-behavior: smooth;

@@ -54,7 +54,8 @@ export function InteractiveMapSection() {
                 src={mapEmbedUrl}
                 width="100%"
                 height="100%"
-                style={{ border: 0 }}
+                className="block w-full"
+                style={{ border: 0, display: 'block', maxWidth: '100%' }}
                 allowFullScreen
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"

@@ -279,7 +279,7 @@ function ImagesPanel() {
     <SectionCard title="Images">
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4">
         <ImageField label="Hero Background" imgKey="heroBg" />
-        <ImageField label="Bride Portrait" imgKey="bride" />
+        <ImageField label="Couple Portrait" imgKey="bride" />
         <ImageField label="Couple Photo" imgKey="couple" />
         <ImageField label="Cultural / Thali" imgKey="thali" />
       </div>

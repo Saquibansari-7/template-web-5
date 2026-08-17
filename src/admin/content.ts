@@ -238,7 +238,7 @@ export const DEFAULT_CONTENT: WeddingContent = {
   mapSub: 'Where two hearts become one',
   mapAddress: 'The Grand Palace, Jaipur, Rajasthan, India',
   mapEmbedUrl:
-    'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3557.5!2d75.7873!3d26.9124!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMjbCsDU0JzQ0LjYiTiA3NcKwNDcnMTQuMyJF!5e0!3m2!1sen!2sin!4v1',
+    'https://maps.google.com/maps?q=The%20Grand%20Palace%2C%20Jaipur%2C%20Rajasthan%2C%20India&z=15&output=embed',
 
   sendLoveHeading: 'Send Your Love',
   sendLoveSub: 'Shower the couple with your blessings & warm wishes',
