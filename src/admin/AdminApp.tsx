@@ -619,20 +619,36 @@ const TABS: { id: Tab; label: string }[] = [
 
 export function AdminApp() {
   const { authenticated, login, logout } = useAuth();
-  const { content, dirty, reset, save } = useContent();
+  const { content, dirty, reset, save, saveToSite, site } = useContent();
   const [tab, setTab] = useState<Tab>('couple');
   const [pw, setPw] = useState('');
   const [err, setErr] = useState(false);
   const [saving, setSaving] = useState(false);
   const [toast, setToast] = useState<{ kind: 'ok' | 'error'; msg: string } | null>(null);
 
+  // Build the "View Site" link. When editing a customer site, preserve the
+  // ?customer= param so the admin opens the live public site, not the default.
+  const viewSiteHref = (() => {
+    if (typeof window === 'undefined') return '/';
+    const params = new URLSearchParams(window.location.search);
+    const customer = params.get('customer');
+    if (customer && customer.trim()) {
+      return '/?customer=' + encodeURIComponent(customer.trim());
+    }
+    return '/';
+  })();
+
   const handleSave = async () => {
     setSaving(true);
-    const result = await save();
+    // When editing a customer site (via ?customer=), write back to the `sites`
+    // row; otherwise save to the default `site_content` row.
+    const result = site
+      ? await saveToSite(site.id)
+      : await save();
     setSaving(false);
     setToast(
       result === 'ok'
-        ? { kind: 'ok', msg: 'Saved successfully ✓' }
+        ? { kind: 'ok', msg: site ? `Saved to site "${site.subdomain}" ✓` : 'Saved successfully ✓' }
         : { kind: 'error', msg: 'Save failed — check Supabase connection' },
     );
     window.setTimeout(() => setToast(null), 3000);
@@ -686,7 +702,7 @@ export function AdminApp() {
           </div>
           <div className="flex items-center gap-2">
             <a
-              href="/"
+              href={viewSiteHref}
               target="_blank"
               rel="noreferrer"
               className="text-[11px] text-slate-400 hover:text-slate-200 px-2 py-1.5 rounded-lg hover:bg-slate-800"
@@ -743,7 +759,7 @@ export function AdminApp() {
           </nav>
           <div className="p-3 border-t border-slate-800 space-y-2">
             <a
-              href="/"
+              href={viewSiteHref}
               target="_blank"
               rel="noreferrer"
               className="block text-center text-xs text-slate-400 hover:text-slate-200 py-2 rounded-lg hover:bg-slate-800 transition"
