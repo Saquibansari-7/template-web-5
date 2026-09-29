@@ -15,14 +15,12 @@ const isAdmin = window.location.pathname.startsWith('/admin')
 
 function PublicSite() {
   const [opened, setOpened] = useState(false)
-  const params = new URLSearchParams(window.location.search)
-  const customer = params.get('customer')
   return (
     <MusicProvider>
       <ContentProvider>
         <App />
       </ContentProvider>
-      {!opened && !customer && <OpeningAnimation onOpen={() => setOpened(true)} />}
+      {!opened && <OpeningAnimation onOpen={() => setOpened(true)} />}
     </MusicProvider>
   )
 }
