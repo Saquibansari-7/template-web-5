@@ -1,3 +1,4 @@
+/* eslint-disable react-refresh/only-export-components */
 import { StrictMode } from 'react'
 import { useState } from 'react'
 import { createRoot } from 'react-dom/client'
@@ -14,12 +15,14 @@ const isAdmin = window.location.pathname.startsWith('/admin')
 
 function PublicSite() {
   const [opened, setOpened] = useState(false)
+  const params = new URLSearchParams(window.location.search)
+  const customer = params.get('customer')
   return (
     <MusicProvider>
       <ContentProvider>
         <App />
       </ContentProvider>
-      {!opened && <OpeningAnimation onOpen={() => setOpened(true)} />}
+      {!opened && !customer && <OpeningAnimation onOpen={() => setOpened(true)} />}
     </MusicProvider>
   )
 }

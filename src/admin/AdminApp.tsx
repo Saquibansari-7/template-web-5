@@ -619,12 +619,27 @@ const TABS: { id: Tab; label: string }[] = [
 
 export function AdminApp() {
   const { authenticated, login, logout } = useAuth();
-  const { content, dirty, reset, save, saveToSite, site } = useContent();
+  const { content, ready, dirty, reset, save, saveToSite, site } = useContent();
   const [tab, setTab] = useState<Tab>('couple');
   const [pw, setPw] = useState('');
   const [err, setErr] = useState(false);
   const [saving, setSaving] = useState(false);
   const [toast, setToast] = useState<{ kind: 'ok' | 'error'; msg: string } | null>(null);
+
+  const params = new URLSearchParams(window.location.search);
+  const customer = params.get('customer');
+
+  if (customer && customer.trim() && ready && !site) {
+    return (
+      <div className="min-h-screen bg-slate-950 flex items-center justify-center">
+        <div className="text-center text-white px-4">
+          <h1 className="text-6xl font-serif mb-4">404</h1>
+          <p className="text-xl mb-2">Wedding site not found</p>
+          <p className="text-slate-400">The site you are looking for does not exist or is no longer available.</p>
+        </div>
+      </div>
+    );
+  }
 
   // Build the "View Site" link. When editing a customer site, preserve the
   // ?customer= param so the admin opens the live public site, not the default.
