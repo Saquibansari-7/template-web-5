@@ -8,9 +8,25 @@ import { StorySection, MemoriesSection } from './components/StoryAndMemories';
 import { SendLoveSection, BlessingVerseSection, Footer } from './components/RSVPAndFooter';
 import { useContent } from './admin/store';
 
+function NotFound() {
+  return (
+    <div className="min-h-screen bg-wine flex items-center justify-center">
+      <div className="text-center text-white px-4">
+        <h1 className="text-6xl font-serif mb-4">404</h1>
+        <p className="text-xl mb-2">Wedding site not found</p>
+        <p className="text-white/70">The site you are looking for does not exist or is no longer available.</p>
+      </div>
+    </div>
+  );
+}
+
 function App() {
-  const { content } = useContent();
+  const { content, customerNotFound } = useContent();
   const s = content.sections;
+
+  if (customerNotFound) {
+    return <NotFound />;
+  }
 
   return (
     <div className="min-h-screen bg-wine">

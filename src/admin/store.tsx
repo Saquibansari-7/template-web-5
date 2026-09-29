@@ -19,6 +19,8 @@ interface ContentContextValue {
   reset: () => void;
   /** Resolved site row when ?customer= matched, otherwise null. */
   site: SiteRow | null;
+  /** Set to true when ?customer= was provided but the site was not found / not active. */
+  customerNotFound: boolean;
 }
 
 const ContentContext = createContext<ContentContextValue | null>(null);
@@ -28,6 +30,7 @@ export function ContentProvider({ children }: { children: ReactNode }) {
   const [ready, setReady] = useState(false);
   const [dirty, setDirty] = useState(false);
   const [site, setSite] = useState<SiteRow | null>(null);
+  const [customerNotFound, setCustomerNotFound] = useState(false);
 
   useEffect(() => {
     let active = true;
@@ -52,12 +55,14 @@ export function ContentProvider({ children }: { children: ReactNode }) {
           if (result) {
             finalize(result.content, result.site);
           } else {
-            // Customer not found / not configured — fall back to default site.
+            setCustomerNotFound(true);
             if (import.meta.env.DEV) console.warn('[ContentProvider] customer not found, using default site');
             loadContent().then((c) => finalize(c, null));
           }
         })
         .catch((err) => {
+          if (!active) return;
+          setCustomerNotFound(true);
           if (import.meta.env.DEV) console.error('[ContentProvider] customer load failed:', err);
           loadContent().then((c) => finalize(c, null));
         });
@@ -145,7 +150,7 @@ export function ContentProvider({ children }: { children: ReactNode }) {
   }, []);
 
   return (
-    <ContentContext.Provider value={{ content, ready, dirty, update, updateImage, addBlessing, removeBlessing, save, saveToSite, reset, site }}>
+    <ContentContext.Provider value={{ content, ready, dirty, update, updateImage, addBlessing, removeBlessing, save, saveToSite, reset, site, customerNotFound }}>
       {children}
     </ContentContext.Provider>
   );
