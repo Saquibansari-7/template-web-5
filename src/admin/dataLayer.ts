@@ -1,7 +1,7 @@
 import { DEFAULT_CONTENT, type WeddingContent } from './content';
 import { loadContent as loadFromSupabase } from '../services/loadContent';
 import { saveContent as saveToSupabase } from '../services/saveContent';
-import { resolveSite, type SiteRow } from '../lib/siteResolver';
+import { type SiteRow } from '../lib/siteResolver';
 
 /**
  * Data layer — backed by Supabase.
@@ -71,16 +71,11 @@ export async function loadContentByCustomer(customer: string): Promise<CustomerS
   const raw = (customer || '').trim();
   if (!raw) return null;
 
-  const url = (import.meta.env.VITE_PUBLIC_SUPABASE_URL as string | undefined)?.trim();
-  const key = (import.meta.env.VITE_PUBLIC_SUPABASE_PUBLISHABLE_KEY as string | undefined)?.trim();
-  if (!url || !key) {
-    if (import.meta.env.DEV) console.warn('[loadContentByCustomer] Supabase not configured, skipping.');
-    return null;
-  }
-
   if (import.meta.env.DEV) console.log('[loadContentByCustomer] raw param:', JSON.stringify(raw));
 
-  const site = await resolveSite(raw, url, key);
+  // Public lookup goes through the main app API (no direct Supabase from browser).
+  const { resolveSite } = await import('../lib/siteResolver');
+  const site = await resolveSite(raw);
   if (!site || !site.data) {
     if (import.meta.env.DEV) console.log('[loadContentByCustomer] no site for', JSON.stringify(raw));
     return null;
