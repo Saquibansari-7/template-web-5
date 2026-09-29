@@ -21,12 +21,12 @@ function NotFound() {
 }
 
 function App() {
-  const { content, site } = useContent();
+  const { content, site, ready } = useContent();
   const params = new URLSearchParams(window.location.search);
   const customer = params.get('customer');
   const s = content.sections;
 
-  if (customer && customer.trim() && !site) {
+  if (customer && customer.trim() && ready && !site) {
     return <NotFound />;
   }
 
