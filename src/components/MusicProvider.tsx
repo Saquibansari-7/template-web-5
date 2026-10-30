@@ -1,3 +1,4 @@
+/* eslint-disable react-refresh/only-export-components */
 import { createContext, useContext, useEffect, useRef, useState, type ReactNode } from 'react';
 import songUrl from '../assets/music/wedding-song.mp3';
 
@@ -14,13 +15,20 @@ export function MusicProvider({ children }: { children: ReactNode }) {
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
 
-  if (audioRef.current === null && typeof Audio !== 'undefined') {
+  useEffect(() => {
+    if (typeof Audio === 'undefined') return;
+
     const audio = new Audio(songUrl);
     audio.loop = true;
     audio.preload = 'auto';
     audio.volume = 0.6;
     audioRef.current = audio;
-  }
+
+    return () => {
+      audio.pause();
+      audioRef.current = null;
+    };
+  }, []);
 
   const play = () => {
     const audio = audioRef.current;

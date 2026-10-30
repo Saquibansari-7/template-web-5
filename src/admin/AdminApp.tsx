@@ -2,7 +2,6 @@ import { useRef, useState, type ReactNode } from 'react';
 import { useContent } from './store';
 import { uploadImage } from '../services/uploadImage';
 import { isSupabaseConfigured } from '../admin/dataLayer';
-import { useAuth } from './auth';
 import { ALL_SECTIONS, DEFAULT_CONTENT, type WeddingContent } from './content';
 
 /* ─── Reusable form primitives ─── */
@@ -618,11 +617,8 @@ const TABS: { id: Tab; label: string }[] = [
 ];
 
 export function AdminApp() {
-  const { authenticated, login, logout } = useAuth();
   const { content, ready, dirty, reset, save, saveToSite, site } = useContent();
   const [tab, setTab] = useState<Tab>('couple');
-  const [pw, setPw] = useState('');
-  const [err, setErr] = useState(false);
   const [saving, setSaving] = useState(false);
   const [toast, setToast] = useState<{ kind: 'ok' | 'error'; msg: string } | null>(null);
 
@@ -669,41 +665,6 @@ export function AdminApp() {
     window.setTimeout(() => setToast(null), 3000);
   };
 
-  if (!authenticated) {
-    return (
-      <div className="min-h-screen bg-slate-950 flex items-center justify-center px-4">
-        <form
-          onSubmit={(e) => {
-            e.preventDefault();
-            if (!login(pw)) setErr(true);
-          }}
-          className="w-full max-w-sm bg-slate-900 border border-slate-700 rounded-xl p-8"
-        >
-          <h1 className="text-xl font-semibold text-amber-300 mb-1 text-center">Wedding Admin</h1>
-          <p className="text-sm text-slate-400 text-center mb-6">Enter your password to continue</p>
-          <input
-            type="password"
-            autoFocus
-            value={pw}
-            onChange={(e) => {
-              setPw(e.target.value);
-              setErr(false);
-            }}
-            placeholder="Password"
-            className={`${inputCls} mb-3`}
-          />
-          {err && <p className="text-red-400 text-sm mb-3">Incorrect password.</p>}
-          <button
-            type="submit"
-            className="w-full py-2.5 rounded-lg bg-amber-500 hover:bg-amber-400 text-slate-900 font-semibold transition"
-          >
-            Sign In
-          </button>
-        </form>
-      </div>
-    );
-  }
-
   return (
     <div className="min-h-screen bg-slate-950 text-slate-100">
       {/* ── Mobile top bar (sm:hidden) ── */}
@@ -724,12 +685,6 @@ export function AdminApp() {
             >
               View ↗
             </a>
-            <button
-              onClick={logout}
-              className="text-[11px] text-slate-400 hover:text-red-400 px-2 py-1.5 rounded-lg hover:bg-slate-800"
-            >
-              Exit
-            </button>
           </div>
         </div>
         {/* Horizontal scrolling tab bar */}
@@ -781,12 +736,6 @@ export function AdminApp() {
             >
               View Site ↗
             </a>
-            <button
-              onClick={logout}
-              className="w-full text-xs text-slate-400 hover:text-red-400 py-2 rounded-lg hover:bg-slate-800 transition"
-            >
-              Sign Out
-            </button>
           </div>
         </aside>
 

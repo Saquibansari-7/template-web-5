@@ -5,14 +5,15 @@ import { createRoot } from 'react-dom/client'
 import './index.css'
 import App from './App.tsx'
 import { ContentProvider } from './admin/store.tsx'
-import { AuthProvider } from './admin/auth.tsx'
 import { AdminApp } from './admin/AdminApp.tsx'
 import { ErrorBoundary } from './admin/ErrorBoundary.tsx'
 import OpeningAnimation from './components/OpeningAnimation.tsx'
+import AdminPasswordGate from './components/admin-password-gate/AdminPasswordGate'
 import { MusicProvider } from './components/MusicProvider.tsx'
 import { resolveSite } from './lib/siteResolver'
 
 const isAdmin = window.location.pathname.startsWith('/admin')
+const adminCustomer = new URLSearchParams(window.location.search).get('customer')?.trim() ?? ''
 
 function PublicSite() {
   const [opened, setOpened] = useState(false)
@@ -66,13 +67,13 @@ function PublicSite() {
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     {isAdmin ? (
-      <AuthProvider>
-        <ContentProvider>
-          <ErrorBoundary>
+      <ErrorBoundary>
+        <AdminPasswordGate customer={adminCustomer}>
+          <ContentProvider>
             <AdminApp />
-          </ErrorBoundary>
-        </ContentProvider>
-      </AuthProvider>
+          </ContentProvider>
+        </AdminPasswordGate>
+      </ErrorBoundary>
     ) : (
       <PublicSite />
     )}
