@@ -1,10 +1,10 @@
 import { useEffect, useRef, useState } from 'react';
 import gsap from 'gsap';
-import leftGateD from '../assets/opening/left-h-gate-d.png';
-import rightGateD from '../assets/opening/right-h-gate-d.png';
-import leftGateM from '../assets/opening/left-h-gate-mo.png';
-import rightGateM from '../assets/opening/right-h-gate-mo.png';
-import sealImg from '../assets/opening/h-stamp.png';
+import leftGateD from '../assets/opening/left-h-gate-d.webp';
+import rightGateD from '../assets/opening/right-h-gate-d.webp';
+import leftGateM from '../assets/opening/left-h-gate-mo.webp';
+import rightGateM from '../assets/opening/right-h-gate-mo.webp';
+import sealImg from '../assets/opening/h-stamp.webp';
 import { useMusic } from './MusicProvider';
 
 export default function OpeningAnimation({ onOpen }: { onOpen: () => void }) {

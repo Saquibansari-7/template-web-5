@@ -123,6 +123,7 @@ function ImageField({
           >
             {busy ? 'Uploading…' : 'Choose image'}
           </button>
+          <p className="text-[11px] text-slate-500 mt-2">Maximum image size: 5 MB.</p>
           <button
             type="button"
             onClick={() => updateImage(imgKey, DEFAULT_CONTENT.images[imgKey])}
@@ -197,6 +198,9 @@ function GalleryManager() {
       >
         {busy ? 'Uploading…' : '+ Upload Photo'}
       </button>
+      <p className="col-span-full text-[11px] text-slate-500">
+        Maximum image size: 5 MB per upload.
+      </p>
       <input
         ref={inputRef}
         type="file"

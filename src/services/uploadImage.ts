@@ -2,8 +2,17 @@ import { supabase } from '../lib/supabase';
 import { SITE_ID } from './loadContent';
 
 const BUCKET = 'sites';
+const MAX_IMAGE_SIZE_BYTES = 5 * 1024 * 1024;
 
 export async function uploadImage(file: File): Promise<string> {
+  if (!file.type.startsWith('image/')) {
+    throw new Error('Please select a valid image file.');
+  }
+
+  if (file.size > MAX_IMAGE_SIZE_BYTES) {
+    throw new Error('Images must be 5 MB or smaller.');
+  }
+
   if (!supabase || !supabase.storage) {
     throw new Error(
       'Supabase is not configured. Check VITE_PUBLIC_SUPABASE_URL / VITE_PUBLIC_SUPABASE_PUBLISHABLE_KEY.',
